@@ -94,8 +94,8 @@ This tool is primarily built for **macOS and Linux** users — these systems can
    **Connect device**：Click "Connect Switch" and select the DBI device from the dialog
 5. **添加文件**：一次选择 NSP/XCI/NSZ/XCZ 文件，或选择整个文件夹；页面会自动标记本体、更新和 DLC
    **Add files**：Select NSP/XCI/NSZ/XCZ files together, or choose a folder; the page labels base, update, and DLC packages automatically
-6. **启动服务**：点击「启动服务」按钮，开始监听 Switch 的传输请求  
-   **Start server**：Click "Start Server" to begin listening for Switch requests
+6. **准备安装**：点击「准备安装」后，回到 Switch 打开 DBI → `Install title from DBIbackend`；此时才会显示文件并开始后续安装
+   **Prepare installation**：Click “Prepare installation,” then on Switch open DBI → `Install title from DBIbackend` to view the files and continue
 7. **在 Switch 上操作**：在 DBI 中选择要安装的文件（文件名会出现在列表中）  
    **Operate on Switch**：Select the file to install in DBI (filenames will appear in the list)
 

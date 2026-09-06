@@ -498,8 +498,8 @@
                         <ul class="file-list compact-file-list" id="fileList"></ul>
 
                         <div class="control-dock">
-                            <div class="player-prompt"><i data-lucide="gamepad-2"></i><div><strong data-i18n="switch_prompt_title">Switch：打开 DBI</strong><span data-i18n-html="switch_prompt_desc">选择 <b>Install title from DBIbackend</b>，然后回到这里启动服务。</span></div></div>
-                            <div class="control-actions"><button class="btn btn-primary" id="btnConnect" onclick="connectUSB()"><i data-lucide="plug-zap"></i><span data-i18n="btn_connect">连接 Switch</span></button><button class="btn" id="btnDisconnect" onclick="disconnectUSB()" disabled><span data-i18n="btn_disconnect">断开</span></button><button class="btn btn-success" id="btnStartServer" onclick="startServer()" disabled><i data-lucide="play"></i><span data-i18n="btn_start_server">启动安装服务</span></button></div>
+                            <div class="player-prompt"><i data-lucide="gamepad-2"></i><div><strong id="switchPromptTitle">准备电脑端</strong><span id="switchPromptDesc">选择文件并连接 Switch，然后点击“准备安装”。</span></div></div>
+                            <div class="control-actions"><button class="btn btn-primary" id="btnConnect" onclick="connectUSB()"><i data-lucide="plug-zap"></i><span data-i18n="btn_connect">连接 Switch</span></button><button class="btn" id="btnDisconnect" onclick="disconnectUSB()" disabled><span data-i18n="btn_disconnect">断开</span></button><button class="btn btn-success" id="btnStartServer" onclick="startServer()" disabled><i data-lucide="play"></i><span id="btnStartServerLabel">准备安装</span></button></div>
                         </div>
 
                         <div class="progress-container" id="progressContainer"><div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div><div class="progress-stats"><span id="progressLabel">文件覆盖：0.0% (0 B / 0 B)</span><span id="progressSpeed">0 MB/s</span><span id="progressEta">剩余: --</span></div><div class="file-overall-progress" id="fileOverallProgress"></div></div>
@@ -605,6 +605,9 @@
         const btnConnect = document.getElementById('btnConnect');
         const btnDisconnect = document.getElementById('btnDisconnect');
         const btnStartServer = document.getElementById('btnStartServer');
+        const btnStartServerLabel = document.getElementById('btnStartServerLabel');
+        const switchPromptTitle = document.getElementById('switchPromptTitle');
+        const switchPromptDesc = document.getElementById('switchPromptDesc');
         const connectionVisual = document.getElementById('connectionVisual');
         const visualStatusText = document.getElementById('visualStatusText');
         const screenProgressFill = document.getElementById('screenProgressFill');
@@ -659,11 +662,13 @@
                 hero_desc: '选择包含本体、更新与 DLC 的文件夹，我们会自动整理。连接一次、启动一次，然后回到 Switch 完成安装。',
                 chip_folder: '递归扫描文件夹', chip_detect: '自动识别安装包', chip_local: '文件不经过云端',
                 device_label: 'USB 连接状态',
-                visual_idle: '等待 USB', visual_connected: '连接成功', visual_ready: '等待 Switch', visual_transfer: '正在传输', visual_complete: '传输完毕',
+                visual_idle: '等待 USB', visual_connected: '连接成功', visual_ready: '请操作 Switch', visual_transfer: '正在传输', visual_complete: '传输完毕',
                 screen_subtitle: '整套安装，一次准备', compact_title: '选择文件夹，直接安装。', compact_desc: '本体、更新与 DLC 一起加入，我们会自动识别并交给 DBI。',
                 compact_step_files: '选择内容', compact_step_connect: '连接 USB', compact_step_install: '在 DBI 安装', compact_formats: 'NSP · XCI · NSZ · XCZ',
-                switch_prompt_title: 'Switch：打开 DBI', switch_prompt_desc: '选择 <b>Install title from DBIbackend</b>，然后回到这里启动服务。',
-                compact_note: '电脑：选择文件 → 连接 Switch → 启动服务　·　Switch：DBI → Install title from DBIbackend → 选择安装包',
+                prompt_prepare_title: '准备电脑端', prompt_prepare_desc: '选择文件并连接 Switch，然后点击“准备安装”。',
+                prompt_switch_title: '现在去 Switch 上操作', prompt_switch_desc: 'DBI → <b>Install title from DBIbackend</b> → 选择安装包。',
+                btn_prepare_install: '准备安装', btn_prepared: '已准备，去 Switch 操作',
+                compact_note: '电脑：选择文件 → 连接 Switch → 准备安装　·　Switch：DBI → Install title from DBIbackend → 选择安装包',
                 library_title: '准备安装内容', library_desc: '本体、更新与 DLC 可以一起选择，不需要分次上传。',
                 auto_note: '类型会自动识别；识别不准时可在列表中修改。',
                 send_title: '开启 DBI 安装服务', send_desc: '服务启动后，安装包会出现在 Switch 的 DBI 列表里。',
@@ -674,7 +679,7 @@
                 guide_computer_title: '这台电脑上', guide_computer_1: '选择文件夹或多个安装包', guide_computer_2: '点击 <b>连接 Switch</b> 并允许 USB 设备', guide_computer_3: '点击 <b>启动安装服务</b>，保持页面开启',
                 privacy_note: '文件只通过浏览器与 USB 数据线发送，不会上传到云端。', footer_note: 'Chrome / Edge · HTTPS 或 localhost · USB 数据线',
                 status_not_connected: '等待连接',
-                btn_connect: '连接 Switch', btn_disconnect: '断开', btn_start_server: '启动安装服务',
+                btn_connect: '连接 Switch', btn_disconnect: '断开', btn_start_server: '准备安装',
                 notice_info: '需要 Chrome/Edge，HTTPS 或 localhost。Switch 上启动 DBI 并选择「后端」。',
                 workflow_title: '一次准备，连续安装',
                 workflow_desc: '本体、更新和 DLC 可以同时加入列表。连接一次、启动一次服务，然后在 Switch 的 DBI 中依次或批量选择。',
@@ -702,7 +707,7 @@
                 log_usb_ok: '✅ USB 连接成功',
                 log_conn_failed: '连接失败: {0}', log_cancelled: '已取消选择设备',
                 log_device_unplugged: '设备断开',
-                log_server_started: '🚀 启动服务', log_server_stopped: '⏹️ 服务停止',
+                log_server_started: '✅ 准备完成：请在 Switch 上打开 DBI → Install title from DBIbackend', log_server_stopped: '⏹️ 安装准备已停止',
                 log_heartbeat: '心跳超时', log_loop_error: '命令循环错误: {0}',
                 log_transfer_timeout: 'USB 传输超时，无法恢复，正在断开设备…',
                 log_unknown_cmd: '未知命令: cmd={0}, size={1}',
@@ -743,11 +748,13 @@
                 hero_desc: 'Choose a folder containing the base game, updates, and DLC. We will organize it automatically. Connect once, start once, then finish on your Switch.',
                 chip_folder: 'Recursive folder scan', chip_detect: 'Package detection', chip_local: 'No cloud upload',
                 device_label: 'USB connection',
-                visual_idle: 'Waiting for USB', visual_connected: 'Connected', visual_ready: 'Waiting for Switch', visual_transfer: 'Transferring', visual_complete: 'Transfer complete',
+                visual_idle: 'Waiting for USB', visual_connected: 'Connected', visual_ready: 'Continue on Switch', visual_transfer: 'Transferring', visual_complete: 'Transfer complete',
                 screen_subtitle: 'One setup for the whole set', compact_title: 'Choose a folder. Install directly.', compact_desc: 'Add the base game, updates, and DLC together. We detect and serve them to DBI.',
                 compact_step_files: 'Choose content', compact_step_connect: 'Connect USB', compact_step_install: 'Install in DBI', compact_formats: 'NSP · XCI · NSZ · XCZ',
-                switch_prompt_title: 'Switch: open DBI', switch_prompt_desc: 'Choose <b>Install title from DBIbackend</b>, then come back here and start the service.',
-                compact_note: 'Computer: choose files → connect Switch → start service · Switch: DBI → Install title from DBIbackend → select packages',
+                prompt_prepare_title: 'Prepare on this computer', prompt_prepare_desc: 'Choose files, connect the Switch, then click “Prepare installation.”',
+                prompt_switch_title: 'Now continue on your Switch', prompt_switch_desc: 'DBI → <b>Install title from DBIbackend</b> → select packages.',
+                btn_prepare_install: 'Prepare installation', btn_prepared: 'Ready — continue on Switch',
+                compact_note: 'Computer: choose files → connect Switch → prepare installation · Switch: DBI → Install title from DBIbackend → select packages',
                 library_title: 'Prepare install content', library_desc: 'Choose the base game, updates, and DLC together—no separate uploads needed.',
                 auto_note: 'Package types are detected automatically and can be corrected in the list.',
                 send_title: 'Start the DBI install service', send_desc: 'After the service starts, packages appear in the DBI list on your Switch.',
@@ -758,7 +765,7 @@
                 guide_computer_title: 'On this computer', guide_computer_1: 'Choose a folder or multiple packages', guide_computer_2: 'Click <b>Connect Switch</b> and allow the USB device', guide_computer_3: 'Click <b>Start install service</b> and keep the page open',
                 privacy_note: 'Files travel only between your browser and USB cable. Nothing is uploaded to the cloud.', footer_note: 'Chrome / Edge · HTTPS or localhost · USB data cable',
                 status_not_connected: 'Waiting to connect',
-                btn_connect: 'Connect Switch', btn_disconnect: 'Disconnect', btn_start_server: 'Start install service',
+                btn_connect: 'Connect Switch', btn_disconnect: 'Disconnect', btn_start_server: 'Prepare installation',
                 notice_info: 'Requires Chrome/Edge, HTTPS or localhost. Launch DBI on the Switch and select "Backend".',
                 workflow_title: 'Prepare once, install continuously',
                 workflow_desc: 'Add the base game, update, and DLC together. Connect once, start the server once, then select packages in DBI on the Switch.',
@@ -786,7 +793,7 @@
                 log_usb_ok: '✅ USB connected',
                 log_conn_failed: 'Connection failed: {0}', log_cancelled: 'Device selection cancelled',
                 log_device_unplugged: 'Device disconnected',
-                log_server_started: '🚀 Server started', log_server_stopped: '⏹️ Server stopped',
+                log_server_started: '✅ Ready: on Switch open DBI → Install title from DBIbackend', log_server_stopped: '⏹️ Installation preparation stopped',
                 log_heartbeat: 'Heartbeat timeout', log_loop_error: 'Command loop error: {0}',
                 log_transfer_timeout: 'USB transfer timeout, unrecoverable, disconnecting…',
                 log_unknown_cmd: 'Unknown command: cmd={0}, size={1}',
@@ -905,6 +912,9 @@
             stepFiles.classList.toggle('done', fileMap.size > 0);
             stepConnect.classList.toggle('done', isConnected);
             stepServer.classList.toggle('done', serverRunning);
+            if (btnStartServerLabel) btnStartServerLabel.textContent = t(serverRunning ? 'btn_prepared' : 'btn_prepare_install');
+            if (switchPromptTitle) switchPromptTitle.textContent = t(serverRunning ? 'prompt_switch_title' : 'prompt_prepare_title');
+            if (switchPromptDesc) switchPromptDesc.innerHTML = t(serverRunning ? 'prompt_switch_desc' : 'prompt_prepare_desc');
         }
         function updatePlanSummary() {
             if (!planSummary) return;
