@@ -361,7 +361,7 @@
         .screen-state .screen-icon { width:14px; height:14px; color:currentColor; }
         .screen-device-name { display:none; }
         .screen-device-name::before { content:'·'; margin-right:7px; }
-        .screen-body { padding:14px 24px 12px; }
+        .screen-body { padding:14px 24px 28px; }
         .screen-intro { display:flex; align-items:center; justify-content:space-between; gap:24px; margin-bottom:13px; }
         .screen-intro h1 { margin:0; color:#f4f7fb; font-size:clamp(1.08rem,1.55vw,1.34rem); font-weight:800; line-height:1.2; letter-spacing:-.022em; }
         .screen-intro p { max-width:430px; margin:0; color:#8d97a7; font-size:.72rem; line-height:1.45; text-align:right; }
@@ -431,6 +431,7 @@
         .screen-footer .activity-panel[open] summary { margin-bottom:8px; }
         .screen-footer .log-toolbar { padding:0 0 8px; }
         .screen-footer .log-area { margin:0; max-height:180px; }
+        .usage-footnote { position:absolute; right:24px; bottom:8px; left:24px; margin:0; color:#a1a9b6; font-size:.58rem; line-height:1.45; text-align:center; opacity:.38; }
         .compact-note { margin:15px 0 0; color:#727c8d; font-size:.68rem; text-align:center; }
         .stick,.face-buttons,.dpad,.rail-button { position:absolute; display:block; }
         .stick { top:96px; left:50%; width:42px; height:42px; transform:translateX(-50%); border:7px solid #17202a; border-radius:50%; background:radial-gradient(circle at 38% 35%,#3b4652,#151b23 62%); box-shadow:inset 2px 2px 5px rgba(255,255,255,.16),0 5px 8px rgba(0,0,0,.36); }
@@ -532,6 +533,7 @@
                         <div class="screen-progress" aria-hidden="true"><span id="screenProgressFill"></span></div>
                         <section class="result-tray"><div class="plan-summary hidden" id="planSummary" aria-live="polite"></div><ul class="file-list compact-file-list" id="fileList"></ul></section>
                         <div class="screen-footer"><button class="text-button" onclick="clearFileList()" data-i18n="btn_clear">清空</button><details class="activity-panel"><summary data-i18n="activity_title">日志</summary><div class="log-toolbar"><button class="btn btn-sm" onclick="clearLog()" data-i18n="btn_clear_log">清空</button><button class="btn btn-sm" onclick="exportLog()" data-i18n="btn_export_log">导出</button></div><div class="log-area" id="logArea"></div></details></div>
+                        <p class="usage-footnote" data-i18n="usage_footnote">顺序：选择文件 → 连接 Switch → 准备 → Switch：DBI → Install title from DBIbackend</p>
                     </div>
                 </div>
             </div>
@@ -699,7 +701,7 @@
                 auto_note: '类型会自动识别；识别不准时可在列表中修改。',
                 send_title: '开启 DBI 安装服务', send_desc: '服务启动后，安装包会出现在 Switch 的 DBI 列表里。',
                 send_state_title: '准备好后，只需启动一次', send_state_hint: '不要拔掉数据线或关闭页面。安装本体后，可继续在 Switch 上选择更新包。',
-                activity_title: '日志',
+                activity_title: '日志', usage_footnote: '顺序：选择文件 → 连接 Switch → 准备 → Switch：DBI → Install title from DBIbackend',
                 guide_kicker: '下一步', guide_title: '照着这里操作', guide_desc: '页面会自动标记已完成的步骤，不需要来回猜。',
                 guide_switch_title: 'Switch 上', guide_switch_1: '打开 <b>DBI</b>', guide_switch_2: '选择 <b>Install title from DBIbackend</b>', guide_switch_3: '服务启动后，勾选本体、更新和 DLC 并安装',
                 guide_computer_title: '这台电脑上', guide_computer_1: '选择文件夹或多个安装包', guide_computer_2: '点击 <b>连接 Switch</b> 并允许 USB 设备', guide_computer_3: '点击 <b>启动安装服务</b>，保持页面开启',
@@ -787,7 +789,7 @@
                 auto_note: 'Package types are detected automatically and can be corrected in the list.',
                 send_title: 'Start the DBI install service', send_desc: 'After the service starts, packages appear in the DBI list on your Switch.',
                 send_state_title: 'When ready, start only once', send_state_hint: 'Keep the cable connected and this page open. After the base game, select its update on the Switch.',
-                activity_title: 'Log',
+                activity_title: 'Log', usage_footnote: 'Order: choose files → connect Switch → prepare → Switch: DBI → Install title from DBIbackend',
                 guide_kicker: 'NEXT UP', guide_title: 'Follow these steps', guide_desc: 'Completed steps are marked automatically, so you always know what comes next.',
                 guide_switch_title: 'On your Switch', guide_switch_1: 'Open <b>DBI</b>', guide_switch_2: 'Choose <b>Install title from DBIbackend</b>', guide_switch_3: 'After the service starts, select the base game, updates, and DLC to install',
                 guide_computer_title: 'On this computer', guide_computer_1: 'Choose a folder or multiple packages', guide_computer_2: 'Click <b>Connect Switch</b> and allow the USB device', guide_computer_3: 'Click <b>Start install service</b> and keep the page open',
