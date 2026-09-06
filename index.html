@@ -365,6 +365,30 @@
         .screen-intro { display:flex; align-items:center; justify-content:space-between; gap:24px; margin-bottom:13px; }
         .screen-intro h1 { margin:0; color:#f4f7fb; font-size:clamp(1.08rem,1.55vw,1.34rem); font-weight:800; line-height:1.2; letter-spacing:-.022em; }
         .screen-intro p { max-width:430px; margin:0; color:#8d97a7; font-size:.72rem; line-height:1.45; text-align:right; }
+        .pipeline { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+        .pipeline-stage { position:relative; display:flex; min-width:0; min-height:164px; flex-direction:column; align-items:flex-start; padding:13px; border:1px solid rgba(255,255,255,.07); border-radius:14px; background:rgba(255,255,255,.025); opacity:.62; transition:border-color .25s ease,background .25s ease,opacity .25s ease,transform .25s ease; }
+        .pipeline-stage:not(:last-child)::after { content:'›'; position:absolute; z-index:3; top:50%; right:-10px; width:18px; height:24px; transform:translateY(-50%); color:#5d6879; font-size:1.5rem; line-height:21px; text-align:center; text-shadow:0 0 7px #080b11; }
+        .pipeline-stage.current { border-color:rgba(94,229,242,.38); background:linear-gradient(145deg,rgba(94,229,242,.1),rgba(255,255,255,.025)); opacity:1; transform:translateY(-2px); box-shadow:0 10px 28px rgba(0,195,227,.08); }
+        .pipeline-stage.done { border-color:rgba(119,227,143,.24); background:rgba(119,227,143,.055); opacity:.88; }
+        .pipeline-stage.done .stage-number { border-color:transparent; background:var(--success); color:#07130b; }
+        .stage-head { display:flex; width:100%; align-items:center; justify-content:space-between; margin-bottom:11px; color:#748092; }
+        .stage-head .lucide { width:17px; height:17px; }
+        .stage-number { display:grid; place-items:center; width:29px; height:24px; border:1px solid rgba(255,255,255,.1); border-radius:8px; background:rgba(255,255,255,.04); color:#99a4b5; font-size:.62rem; font-weight:850; }
+        .pipeline-stage > strong { color:#eef2f7; font-size:.78rem; }
+        .pipeline-stage > p { min-height:34px; margin:4px 0 10px; color:#7f899a; font-size:.65rem; line-height:1.45; }
+        .pipeline-stage .btn { width:100%; min-height:34px; margin-top:auto; padding:6px 8px; font-size:.68rem; }
+        .stage-link { align-self:center; margin:7px auto 0; padding:0; border:0; background:none; color:#778294; cursor:pointer; font-size:.62rem; }
+        .stage-link:hover:not(:disabled) { color:#fff; }
+        .stage-link:disabled { cursor:not-allowed; opacity:.35; }
+        .stage-drop-target { display:flex; width:100%; min-height:55px; flex-direction:column; margin-top:auto; }
+        .stage-drop-target.dragover { outline:1px dashed var(--accent); outline-offset:5px; border-radius:8px; }
+        .stage-path { display:block; width:100%; margin-top:auto; padding:8px 5px; overflow:hidden; border-radius:8px; background:#090c12; color:#aab4c3; font-family:var(--font-mono); font-size:.58rem; text-align:center; text-overflow:ellipsis; white-space:nowrap; }
+        .result-tray { margin-top:11px; padding:10px; border:1px solid rgba(255,255,255,.055); border-radius:13px; background:rgba(0,0,0,.15); }
+        .result-head { display:flex; min-height:25px; align-items:center; gap:10px; color:#8e98a8; font-size:.68rem; font-weight:750; }
+        .result-head .plan-summary { flex:1; justify-content:flex-end; margin:0; padding:0; border:0; background:none; }
+        .result-head .summary-total { margin-left:8px; }
+        .result-tray .compact-file-list { max-height:176px; margin-top:5px; }
+        .result-tray .compact-file-list:not(:has(.file-item)) { min-height:39px; }
         .workflow-strip { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin-bottom:12px; }
         .workflow-strip .workflow-step { min-width:0; padding:8px 10px; border-radius:11px; font-size:.71rem; }
         .workflow-strip .workflow-step-number { width:20px; height:20px; flex-basis:20px; font-size:.62rem; }
@@ -449,6 +473,9 @@
             .screen-topbar { padding:11px 12px; }
             .screen-title small,.screen-device-name { display:none; }
             .screen-body { padding:16px 12px 12px; }
+            .pipeline { grid-template-columns:1fr; gap:12px; }
+            .pipeline-stage { min-height:132px; }
+            .pipeline-stage:not(:last-child)::after { content:'↓'; top:auto; right:50%; bottom:-18px; width:24px; height:22px; transform:translateX(50%); font-size:.9rem; line-height:22px; }
             .workflow-strip { gap:4px; }
             .workflow-strip .workflow-step { justify-content:center; padding:7px 5px; font-size:.64rem; }
             .compact-drop { grid-template-columns:1fr; text-align:center; }
@@ -480,38 +507,38 @@
 
                     <div class="screen-body">
                         <section class="screen-intro"><h1 data-i18n="compact_title">选择文件夹，直接安装。</h1><p data-i18n="compact_desc">本体、更新与 DLC 一起加入，我们会自动识别并交给 DBI。</p></section>
-
-                        <div class="workflow-strip" aria-label="Progress">
-                            <div class="workflow-step" id="stepFiles"><span class="workflow-step-number">1</span><span data-i18n="compact_step_files">选择内容</span></div>
-                            <div class="workflow-step" id="stepConnect"><span class="workflow-step-number">2</span><span data-i18n="compact_step_connect">连接 USB</span></div>
-                            <div class="workflow-step" id="stepServer"><span class="workflow-step-number">3</span><span data-i18n="compact_step_install">在 DBI 安装</span></div>
+                        <div class="pipeline" aria-label="Installation flow">
+                            <section class="pipeline-stage" id="stepFiles">
+                                <div class="stage-head"><span class="stage-number">01</span><i data-lucide="folder-open"></i></div>
+                                <strong data-i18n="pipeline_files_title">选择安装内容</strong><p data-i18n="pipeline_files_desc">整个文件夹，或多个安装包</p>
+                                <div class="stage-drop-target" id="dropZone"><button type="button" class="btn btn-primary" onclick="document.getElementById('folderInput').click()"><span data-i18n="btn_choose_folder">选择文件夹</span></button><button type="button" class="stage-link" onclick="document.getElementById('fileInput').click()" data-i18n="btn_choose_files">改为选择文件</button></div>
+                                <input type="file" id="fileInput" multiple accept=".nsp,.xci,.nsz,.xcz" hidden onchange="handleFileSelect(event)"><input type="file" id="folderInput" multiple webkitdirectory directory hidden onchange="handleFileSelect(event)">
+                            </section>
+                            <section class="pipeline-stage" id="stepConnect">
+                                <div class="stage-head"><span class="stage-number">02</span><i data-lucide="cable"></i></div>
+                                <strong data-i18n="pipeline_connect_title">连接 Switch</strong><p data-i18n="pipeline_connect_desc">允许浏览器访问 USB 设备</p>
+                                <button class="btn btn-primary" id="btnConnect" onclick="connectUSB()" disabled><span data-i18n="btn_connect">连接 Switch</span></button><button class="stage-link" id="btnDisconnect" onclick="disconnectUSB()" disabled data-i18n="btn_disconnect">断开连接</button>
+                            </section>
+                            <section class="pipeline-stage" id="stepServer">
+                                <div class="stage-head"><span class="stage-number">03</span><i data-lucide="radio-tower"></i></div>
+                                <strong data-i18n="pipeline_prepare_title">准备安装</strong><p data-i18n="pipeline_prepare_desc">打开文件通道，不会自动安装</p>
+                                <button class="btn btn-success" id="btnStartServer" onclick="startServer()" disabled><span id="btnStartServerLabel">准备安装</span></button>
+                            </section>
+                            <section class="pipeline-stage" id="stepSwitch">
+                                <div class="stage-head"><span class="stage-number">04</span><i data-lucide="gamepad-2"></i></div>
+                                <strong id="switchPromptTitle">在 Switch 上安装</strong><p id="switchPromptDesc">完成前 3 步后，在 DBI 中选择安装包。</p>
+                                <span class="stage-path">DBI → DBIbackend</span>
+                            </section>
                         </div>
-
-                        <div class="compact-drop" id="dropZone">
-                            <i data-lucide="folder-up"></i>
-                            <div class="compact-drop-copy"><strong data-i18n="drop_hint">选择游戏文件夹，自动整理安装组合</strong><span data-i18n="compact_formats">NSP · XCI · NSZ · XCZ</span></div>
-                            <div class="compact-drop-actions"><button type="button" class="btn btn-primary" onclick="document.getElementById('folderInput').click()"><i data-lucide="folder-open"></i><span data-i18n="btn_choose_folder">选择文件夹</span></button><button type="button" class="btn" onclick="document.getElementById('fileInput').click()"><i data-lucide="files"></i><span data-i18n="btn_choose_files">选择文件</span></button></div>
-                            <input type="file" id="fileInput" multiple accept=".nsp,.xci,.nsz,.xcz" hidden onchange="handleFileSelect(event)"><input type="file" id="folderInput" multiple webkitdirectory directory hidden onchange="handleFileSelect(event)">
-                        </div>
-
-                        <div class="plan-summary hidden" id="planSummary" aria-live="polite"></div>
-                        <ul class="file-list compact-file-list" id="fileList"></ul>
-
-                        <div class="control-dock">
-                            <div class="player-prompt"><i data-lucide="gamepad-2"></i><div><strong id="switchPromptTitle">准备电脑端</strong><span id="switchPromptDesc">选择文件并连接 Switch，然后点击“准备安装”。</span></div></div>
-                            <div class="control-actions"><button class="btn btn-primary" id="btnConnect" onclick="connectUSB()"><i data-lucide="plug-zap"></i><span data-i18n="btn_connect">连接 Switch</span></button><button class="btn" id="btnDisconnect" onclick="disconnectUSB()" disabled><span data-i18n="btn_disconnect">断开</span></button><button class="btn btn-success" id="btnStartServer" onclick="startServer()" disabled><i data-lucide="play"></i><span id="btnStartServerLabel">准备安装</span></button></div>
-                        </div>
-
                         <div class="progress-container" id="progressContainer"><div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div><div class="progress-stats"><span id="progressLabel">文件覆盖：0.0% (0 B / 0 B)</span><span id="progressSpeed">0 MB/s</span><span id="progressEta">剩余: --</span></div><div class="file-overall-progress" id="fileOverallProgress"></div></div>
                         <div class="screen-progress" aria-hidden="true"><span id="screenProgressFill"></span></div>
-
+                        <section class="result-tray"><div class="result-head"><span data-i18n="result_title">安装内容</span><div class="plan-summary hidden" id="planSummary" aria-live="polite"></div></div><ul class="file-list compact-file-list" id="fileList"></ul></section>
                         <div class="screen-footer"><span><i data-lucide="lock-keyhole"></i><span data-i18n="privacy_note">文件不会上传云端</span></span><button class="text-button" onclick="clearFileList()" data-i18n="btn_clear">清空列表</button><details class="activity-panel"><summary data-i18n="activity_title">日志</summary><div class="log-toolbar"><button class="btn btn-sm" onclick="clearLog()" data-i18n="btn_clear_log">清空</button><button class="btn btn-sm" onclick="exportLog()" data-i18n="btn_export_log">导出</button></div><div class="log-area" id="logArea"></div></details></div>
                     </div>
                 </div>
             </div>
             <div class="big-joycon big-joycon-right" aria-hidden="true"><span class="face-buttons"></span><span class="stick"></span><span class="rail-button"></span></div>
         </section>
-        <p class="compact-note" data-i18n="compact_note">电脑：选择文件 → 连接 Switch → 启动服务　·　Switch：DBI → Install title from DBIbackend → 选择安装包</p>
     </main>
 
     <!-- Windows 驱动提示（仅 Windows 系统显示一次） -->
@@ -619,6 +646,7 @@
         const stepFiles = document.getElementById('stepFiles');
         const stepConnect = document.getElementById('stepConnect');
         const stepServer = document.getElementById('stepServer');
+        const stepSwitch = document.getElementById('stepSwitch');
         const progressContainer = document.getElementById('progressContainer');
         const progressFill = document.getElementById('progressFill');
         const progressLabel = document.getElementById('progressLabel');
@@ -665,7 +693,9 @@
                 visual_idle: '等待 USB', visual_connected: '连接成功', visual_ready: '请操作 Switch', visual_transfer: '正在传输', visual_complete: '传输完毕',
                 screen_subtitle: '整套安装，一次准备', compact_title: '选择文件夹，直接安装。', compact_desc: '本体、更新与 DLC 一起加入，我们会自动识别并交给 DBI。',
                 compact_step_files: '选择内容', compact_step_connect: '连接 USB', compact_step_install: '在 DBI 安装', compact_formats: 'NSP · XCI · NSZ · XCZ',
-                prompt_prepare_title: '准备电脑端', prompt_prepare_desc: '选择文件并连接 Switch，然后点击“准备安装”。',
+                pipeline_files_title: '选择安装内容', pipeline_files_desc: '整个文件夹，或多个安装包', pipeline_connect_title: '连接 Switch', pipeline_connect_desc: '允许浏览器访问 USB 设备',
+                pipeline_prepare_title: '准备安装', pipeline_prepare_desc: '打开文件通道，不会自动安装', result_title: '安装内容',
+                prompt_prepare_title: '在 Switch 上安装', prompt_prepare_desc: '完成前 3 步后，在 DBI 中选择安装包。',
                 prompt_switch_title: '现在去 Switch 上操作', prompt_switch_desc: 'DBI → <b>Install title from DBIbackend</b> → 选择安装包。',
                 btn_prepare_install: '准备安装', btn_prepared: '已准备，去 Switch 操作',
                 compact_note: '电脑：选择文件 → 连接 Switch → 准备安装　·　Switch：DBI → Install title from DBIbackend → 选择安装包',
@@ -751,7 +781,9 @@
                 visual_idle: 'Waiting for USB', visual_connected: 'Connected', visual_ready: 'Continue on Switch', visual_transfer: 'Transferring', visual_complete: 'Transfer complete',
                 screen_subtitle: 'One setup for the whole set', compact_title: 'Choose a folder. Install directly.', compact_desc: 'Add the base game, updates, and DLC together. We detect and serve them to DBI.',
                 compact_step_files: 'Choose content', compact_step_connect: 'Connect USB', compact_step_install: 'Install in DBI', compact_formats: 'NSP · XCI · NSZ · XCZ',
-                prompt_prepare_title: 'Prepare on this computer', prompt_prepare_desc: 'Choose files, connect the Switch, then click “Prepare installation.”',
+                pipeline_files_title: 'Choose content', pipeline_files_desc: 'A whole folder or multiple packages', pipeline_connect_title: 'Connect Switch', pipeline_connect_desc: 'Allow browser access to the USB device',
+                pipeline_prepare_title: 'Prepare installation', pipeline_prepare_desc: 'Open the file channel; nothing installs yet', result_title: 'Install content',
+                prompt_prepare_title: 'Install on Switch', prompt_prepare_desc: 'After steps 1–3, choose packages in DBI.',
                 prompt_switch_title: 'Now continue on your Switch', prompt_switch_desc: 'DBI → <b>Install title from DBIbackend</b> → select packages.',
                 btn_prepare_install: 'Prepare installation', btn_prepared: 'Ready — continue on Switch',
                 compact_note: 'Computer: choose files → connect Switch → prepare installation · Switch: DBI → Install title from DBIbackend → select packages',
@@ -844,6 +876,7 @@
             if (!['idle','connected','ready','transfer','complete'].includes(state)) return;
             visualState = state;
             renderVisualState();
+            updateGuideState();
         }
         function applyLang() {
             document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
@@ -912,6 +945,13 @@
             stepFiles.classList.toggle('done', fileMap.size > 0);
             stepConnect.classList.toggle('done', isConnected);
             stepServer.classList.toggle('done', serverRunning);
+            if (stepSwitch) stepSwitch.classList.toggle('done', visualState === 'complete');
+            stepFiles.classList.toggle('current', fileMap.size === 0);
+            stepConnect.classList.toggle('current', fileMap.size > 0 && !isConnected);
+            stepServer.classList.toggle('current', isConnected && !serverRunning);
+            if (stepSwitch) stepSwitch.classList.toggle('current', serverRunning && visualState !== 'complete');
+            btnConnect.disabled = isConnected || fileMap.size === 0;
+            btnStartServer.disabled = !isConnected || serverRunning || fileMap.size === 0;
             if (btnStartServerLabel) btnStartServerLabel.textContent = t(serverRunning ? 'btn_prepared' : 'btn_prepare_install');
             if (switchPromptTitle) switchPromptTitle.textContent = t(serverRunning ? 'prompt_switch_title' : 'prompt_prepare_title');
             if (switchPromptDesc) switchPromptDesc.innerHTML = t(serverRunning ? 'prompt_switch_desc' : 'prompt_prepare_desc');
