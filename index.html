@@ -348,25 +348,25 @@
         .console-app { position:relative; z-index:1; width:min(1180px, calc(100% - 28px)); margin:0 auto; padding:18px 0 30px; }
         .compact-topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; padding:0 4px; }
         .compact-topbar .brand-version { font-size:.66rem; }
-        .handheld { display:grid; grid-template-columns:112px minmax(0, 1fr) 112px; align-items:stretch; min-height:520px; filter:drop-shadow(0 35px 55px rgba(0,0,0,.45)); transition:filter .4s ease; }
+        .handheld { display:grid; grid-template-columns:112px minmax(0, 1fr) 112px; align-items:stretch; min-height:414px; filter:drop-shadow(0 35px 55px rgba(0,0,0,.45)); transition:filter .4s ease; }
         .big-joycon { position:relative; z-index:1; overflow:hidden; border:1px solid rgba(255,255,255,.13); box-shadow:inset 7px 0 12px rgba(255,255,255,.08), inset -8px -8px 18px rgba(0,0,0,.25); }
         .big-joycon-left { border-radius:62px 15px 15px 62px; background:linear-gradient(145deg,#12cfe8,#008ca7); }
         .big-joycon-right { border-radius:15px 62px 62px 15px; background:linear-gradient(145deg,#ff6572,#d52e43); }
         .display-shell { z-index:2; margin:0 -4px; padding:12px; border-radius:25px; background:linear-gradient(145deg,#242a34,#080a0f 42%,#020307); box-shadow:inset 0 1px 1px rgba(255,255,255,.22), inset 0 -2px 6px #000, 0 16px 36px rgba(0,0,0,.48); }
-        .display-screen { position:relative; min-height:496px; overflow:hidden; border:1px solid rgba(255,255,255,.08); border-radius:15px; background:radial-gradient(circle at 50% -10%,rgba(0,195,227,.1),transparent 32rem),linear-gradient(180deg,#121722,#090c13); box-shadow:inset 0 0 35px rgba(0,0,0,.46); }
-        .screen-topbar { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:13px 18px; border-bottom:1px solid rgba(255,255,255,.07); background:rgba(5,7,11,.52); }
+        .display-screen { position:relative; min-height:390px; overflow:hidden; border:1px solid rgba(255,255,255,.08); border-radius:15px; background:radial-gradient(circle at 50% -10%,rgba(0,195,227,.1),transparent 32rem),linear-gradient(180deg,#121722,#090c13); box-shadow:inset 0 0 35px rgba(0,0,0,.46); }
+        .screen-topbar { display:flex; align-items:center; justify-content:flex-end; gap:16px; padding:11px 18px; border-bottom:1px solid rgba(255,255,255,.07); background:rgba(5,7,11,.52); }
         .screen-title { display:flex; align-items:baseline; gap:10px; font-size:.76rem; font-weight:900; letter-spacing:.08em; }
         .screen-title small { color:#798394; font-size:.66rem; font-weight:600; letter-spacing:0; }
         .screen-state { display:flex; align-items:center; gap:7px; min-width:0; padding:6px 9px; border:1px solid rgba(255,255,255,.06); border-radius:999px; background:rgba(255,255,255,.035); color:#a4adbb; font-size:.72rem; font-weight:750; transition:.3s ease; }
         .screen-state .screen-icon { width:14px; height:14px; color:currentColor; }
-        .screen-device-name { max-width:170px; overflow:hidden; color:#6f7888; font-weight:500; text-overflow:ellipsis; white-space:nowrap; }
+        .screen-device-name { display:none; }
         .screen-device-name::before { content:'·'; margin-right:7px; }
-        .screen-body { padding:19px 24px 16px; }
+        .screen-body { padding:14px 24px 12px; }
         .screen-intro { display:flex; align-items:center; justify-content:space-between; gap:24px; margin-bottom:13px; }
         .screen-intro h1 { margin:0; color:#f4f7fb; font-size:clamp(1.08rem,1.55vw,1.34rem); font-weight:800; line-height:1.2; letter-spacing:-.022em; }
         .screen-intro p { max-width:430px; margin:0; color:#8d97a7; font-size:.72rem; line-height:1.45; text-align:right; }
         .pipeline { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
-        .pipeline-stage { position:relative; display:flex; min-width:0; min-height:164px; flex-direction:column; align-items:flex-start; padding:13px; border:1px solid rgba(255,255,255,.07); border-radius:14px; background:rgba(255,255,255,.025); opacity:.62; transition:border-color .25s ease,background .25s ease,opacity .25s ease,transform .25s ease; }
+        .pipeline-stage { position:relative; display:flex; min-width:0; min-height:136px; flex-direction:column; align-items:flex-start; padding:13px; border:1px solid rgba(255,255,255,.07); border-radius:14px; background:rgba(255,255,255,.025); opacity:.62; transition:border-color .25s ease,background .25s ease,opacity .25s ease,transform .25s ease; }
         .pipeline-stage:not(:last-child)::after { content:'›'; position:absolute; z-index:3; top:50%; right:-10px; width:18px; height:24px; transform:translateY(-50%); color:#5d6879; font-size:1.5rem; line-height:21px; text-align:center; text-shadow:0 0 7px #080b11; }
         .pipeline-stage.current { border-color:rgba(94,229,242,.38); background:linear-gradient(145deg,rgba(94,229,242,.1),rgba(255,255,255,.025)); opacity:1; transform:translateY(-2px); box-shadow:0 10px 28px rgba(0,195,227,.08); }
         .pipeline-stage.done { border-color:rgba(119,227,143,.24); background:rgba(119,227,143,.055); opacity:.88; }
@@ -375,12 +375,12 @@
         .stage-head .lucide { width:17px; height:17px; }
         .stage-number { display:grid; place-items:center; width:29px; height:24px; border:1px solid rgba(255,255,255,.1); border-radius:8px; background:rgba(255,255,255,.04); color:#99a4b5; font-size:.62rem; font-weight:850; }
         .pipeline-stage > strong { color:#eef2f7; font-size:.78rem; }
-        .pipeline-stage > p { min-height:34px; margin:4px 0 10px; color:#7f899a; font-size:.65rem; line-height:1.45; }
         .pipeline-stage .btn { width:100%; min-height:34px; margin-top:auto; padding:6px 8px; font-size:.68rem; }
+        .pipeline-stage #btnStartServer { min-width:0; }
         .stage-link { align-self:center; margin:7px auto 0; padding:0; border:0; background:none; color:#778294; cursor:pointer; font-size:.62rem; }
         .stage-link:hover:not(:disabled) { color:#fff; }
         .stage-link:disabled { cursor:not-allowed; opacity:.35; }
-        .stage-drop-target { display:flex; width:100%; min-height:55px; flex-direction:column; margin-top:auto; }
+        .stage-drop-target { display:flex; width:100%; min-height:47px; flex-direction:column; margin-top:auto; }
         .stage-drop-target.dragover { outline:1px dashed var(--accent); outline-offset:5px; border-radius:8px; }
         .stage-path { display:block; width:100%; margin-top:auto; padding:8px 5px; overflow:hidden; border-radius:8px; background:#090c12; color:#aab4c3; font-family:var(--font-mono); font-size:.58rem; text-align:center; text-overflow:ellipsis; white-space:nowrap; }
         .result-tray { margin-top:11px; padding:10px; border:1px solid rgba(255,255,255,.055); border-radius:13px; background:rgba(0,0,0,.15); }
@@ -419,7 +419,7 @@
         .progress-container { margin:11px 0 0; padding:11px 12px; border:1px solid rgba(255,255,255,.06); border-radius:12px; background:rgba(0,0,0,.18); }
         .screen-progress { position:absolute; z-index:5; right:0; bottom:0; left:0; width:auto; height:3px; overflow:hidden; border-radius:0; background:rgba(255,255,255,.05); opacity:0; }
         .screen-progress span { display:block; width:0; height:100%; background:var(--accent); box-shadow:0 0 14px currentColor; transition:width .25s ease; }
-        .screen-footer { display:flex; align-items:center; gap:14px; min-height:31px; margin-top:10px; color:#697384; font-size:.64rem; }
+        .screen-footer { display:flex; align-items:center; justify-content:flex-end; gap:14px; min-height:27px; margin-top:7px; color:#697384; font-size:.64rem; }
         .screen-footer > span { display:flex; align-items:center; gap:6px; margin-right:auto; }
         .screen-footer .lucide { width:13px; height:13px; }
         .text-button { padding:3px 0; border:0; background:none; color:#858fa0; cursor:pointer; font-size:.65rem; }
@@ -501,39 +501,37 @@
             <div class="display-shell">
                 <div class="display-screen">
                     <header class="screen-topbar">
-                        <div class="screen-title"><span>DBI DROP</span></div>
                         <div class="screen-state"><span class="status-dot" id="statusDot"></span><i class="screen-icon" data-lucide="usb"></i><span id="visualStatusText" data-i18n="visual_idle">等待 USB</span><span class="screen-device-name" id="statusText" data-i18n="status_not_connected">等待连接</span></div>
                     </header>
 
                     <div class="screen-body">
-                        <section class="screen-intro"><h1 data-i18n="compact_title">使用说明</h1><p data-i18n="compact_desc">按 01 → 04 从左到右操作；完成当前步骤后，下一步会自动解锁。</p></section>
                         <div class="pipeline" aria-label="Installation flow">
                             <section class="pipeline-stage" id="stepFiles">
                                 <div class="stage-head"><span class="stage-number">01</span><i data-lucide="folder-open"></i></div>
-                                <strong data-i18n="pipeline_files_title">选择安装内容</strong><p data-i18n="pipeline_files_desc">整个文件夹，或多个安装包</p>
-                                <div class="stage-drop-target" id="dropZone"><button type="button" class="btn btn-primary" onclick="document.getElementById('folderInput').click()"><span data-i18n="btn_choose_folder">选择文件夹</span></button><button type="button" class="stage-link" onclick="document.getElementById('fileInput').click()" data-i18n="btn_choose_files">改为选择文件</button></div>
+                                <strong data-i18n="pipeline_files_title">选文件</strong>
+                                <div class="stage-drop-target" id="dropZone"><button type="button" class="btn btn-primary" onclick="document.getElementById('folderInput').click()"><span data-i18n="btn_choose_folder">文件夹</span></button><button type="button" class="stage-link" onclick="document.getElementById('fileInput').click()" data-i18n="btn_choose_files">文件</button></div>
                                 <input type="file" id="fileInput" multiple accept=".nsp,.xci,.nsz,.xcz" hidden onchange="handleFileSelect(event)"><input type="file" id="folderInput" multiple webkitdirectory directory hidden onchange="handleFileSelect(event)">
                             </section>
                             <section class="pipeline-stage" id="stepConnect">
                                 <div class="stage-head"><span class="stage-number">02</span><i data-lucide="cable"></i></div>
-                                <strong data-i18n="pipeline_connect_title">连接 Switch</strong><p data-i18n="pipeline_connect_desc">允许浏览器访问 USB 设备</p>
-                                <button class="btn btn-primary" id="btnConnect" onclick="connectUSB()" disabled><span data-i18n="btn_connect">连接 Switch</span></button><button class="stage-link" id="btnDisconnect" onclick="disconnectUSB()" disabled data-i18n="btn_disconnect">断开连接</button>
+                                <strong data-i18n="pipeline_connect_title">连接</strong>
+                                <button class="btn btn-primary" id="btnConnect" onclick="connectUSB()" disabled><span data-i18n="btn_connect">连接</span></button><button class="stage-link" id="btnDisconnect" onclick="disconnectUSB()" disabled data-i18n="btn_disconnect">断开</button>
                             </section>
                             <section class="pipeline-stage" id="stepServer">
                                 <div class="stage-head"><span class="stage-number">03</span><i data-lucide="radio-tower"></i></div>
-                                <strong data-i18n="pipeline_prepare_title">准备安装</strong><p data-i18n="pipeline_prepare_desc">打开文件通道，不会自动安装</p>
-                                <button class="btn btn-success" id="btnStartServer" onclick="startServer()" disabled><span id="btnStartServerLabel">准备安装</span></button>
+                                <strong data-i18n="pipeline_prepare_title">准备</strong>
+                                <button class="btn btn-success" id="btnStartServer" onclick="startServer()" disabled><span id="btnStartServerLabel">准备</span></button>
                             </section>
                             <section class="pipeline-stage" id="stepSwitch">
                                 <div class="stage-head"><span class="stage-number">04</span><i data-lucide="gamepad-2"></i></div>
-                                <strong id="switchPromptTitle">在 Switch 上安装</strong><p id="switchPromptDesc">打开 DBI，进入下面的菜单，再选择安装包。</p>
+                                <strong data-i18n="pipeline_switch_title">Switch</strong>
                                 <span class="stage-path">Install title from DBIbackend</span>
                             </section>
                         </div>
                         <div class="progress-container" id="progressContainer"><div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div><div class="progress-stats"><span id="progressLabel">文件覆盖：0.0% (0 B / 0 B)</span><span id="progressSpeed">0 MB/s</span><span id="progressEta">剩余: --</span></div><div class="file-overall-progress" id="fileOverallProgress"></div></div>
                         <div class="screen-progress" aria-hidden="true"><span id="screenProgressFill"></span></div>
-                        <section class="result-tray"><div class="result-head"><span data-i18n="result_title">安装内容</span><div class="plan-summary hidden" id="planSummary" aria-live="polite"></div></div><ul class="file-list compact-file-list" id="fileList"></ul></section>
-                        <div class="screen-footer"><span><i data-lucide="lock-keyhole"></i><span data-i18n="privacy_note">文件不会上传云端</span></span><button class="text-button" onclick="clearFileList()" data-i18n="btn_clear">清空列表</button><details class="activity-panel"><summary data-i18n="activity_title">日志</summary><div class="log-toolbar"><button class="btn btn-sm" onclick="clearLog()" data-i18n="btn_clear_log">清空</button><button class="btn btn-sm" onclick="exportLog()" data-i18n="btn_export_log">导出</button></div><div class="log-area" id="logArea"></div></details></div>
+                        <section class="result-tray"><div class="plan-summary hidden" id="planSummary" aria-live="polite"></div><ul class="file-list compact-file-list" id="fileList"></ul></section>
+                        <div class="screen-footer"><button class="text-button" onclick="clearFileList()" data-i18n="btn_clear">清空</button><details class="activity-panel"><summary data-i18n="activity_title">日志</summary><div class="log-toolbar"><button class="btn btn-sm" onclick="clearLog()" data-i18n="btn_clear_log">清空</button><button class="btn btn-sm" onclick="exportLog()" data-i18n="btn_export_log">导出</button></div><div class="log-area" id="logArea"></div></details></div>
                     </div>
                 </div>
             </div>
@@ -633,8 +631,6 @@
         const btnDisconnect = document.getElementById('btnDisconnect');
         const btnStartServer = document.getElementById('btnStartServer');
         const btnStartServerLabel = document.getElementById('btnStartServerLabel');
-        const switchPromptTitle = document.getElementById('switchPromptTitle');
-        const switchPromptDesc = document.getElementById('switchPromptDesc');
         const connectionVisual = document.getElementById('connectionVisual');
         const visualStatusText = document.getElementById('visualStatusText');
         const screenProgressFill = document.getElementById('screenProgressFill');
@@ -693,35 +689,35 @@
                 visual_idle: '等待 USB', visual_connected: '连接成功', visual_ready: '请操作 Switch', visual_transfer: '正在传输', visual_complete: '传输完毕',
                 screen_subtitle: '', compact_title: '使用说明', compact_desc: '按 01 → 04 从左到右操作；完成当前步骤后，下一步会自动解锁。',
                 compact_step_files: '选择内容', compact_step_connect: '连接 USB', compact_step_install: '在 DBI 安装', compact_formats: 'NSP · XCI · NSZ · XCZ',
-                pipeline_files_title: '选择安装内容', pipeline_files_desc: '整个文件夹，或多个安装包', pipeline_connect_title: '连接 Switch', pipeline_connect_desc: '允许浏览器访问 USB 设备',
-                pipeline_prepare_title: '准备安装', pipeline_prepare_desc: '打开文件通道，不会自动安装', result_title: '安装内容',
+                pipeline_files_title: '选文件', pipeline_files_desc: '整个文件夹，或多个安装包', pipeline_connect_title: '连接', pipeline_connect_desc: '允许浏览器访问 USB 设备',
+                pipeline_prepare_title: '准备', pipeline_prepare_desc: '打开文件通道，不会自动安装', pipeline_switch_title: 'Switch', result_title: '安装内容',
                 prompt_prepare_title: '在 Switch 上安装', prompt_prepare_desc: '打开 DBI，进入下面的菜单，再选择安装包。',
                 prompt_switch_title: '现在去 Switch 上操作', prompt_switch_desc: 'DBI → <b>Install title from DBIbackend</b> → 选择安装包。',
-                btn_prepare_install: '准备安装', btn_prepared: '已准备，去 Switch 操作',
+                btn_prepare_install: '准备', btn_prepared: '已准备',
                 compact_note: '电脑：选择文件 → 连接 Switch → 准备安装　·　Switch：DBI → Install title from DBIbackend → 选择安装包',
                 library_title: '准备安装内容', library_desc: '本体、更新与 DLC 可以一起选择，不需要分次上传。',
                 auto_note: '类型会自动识别；识别不准时可在列表中修改。',
                 send_title: '开启 DBI 安装服务', send_desc: '服务启动后，安装包会出现在 Switch 的 DBI 列表里。',
                 send_state_title: '准备好后，只需启动一次', send_state_hint: '不要拔掉数据线或关闭页面。安装本体后，可继续在 Switch 上选择更新包。',
-                activity_title: '连接与传输记录',
+                activity_title: '日志',
                 guide_kicker: '下一步', guide_title: '照着这里操作', guide_desc: '页面会自动标记已完成的步骤，不需要来回猜。',
                 guide_switch_title: 'Switch 上', guide_switch_1: '打开 <b>DBI</b>', guide_switch_2: '选择 <b>Install title from DBIbackend</b>', guide_switch_3: '服务启动后，勾选本体、更新和 DLC 并安装',
                 guide_computer_title: '这台电脑上', guide_computer_1: '选择文件夹或多个安装包', guide_computer_2: '点击 <b>连接 Switch</b> 并允许 USB 设备', guide_computer_3: '点击 <b>启动安装服务</b>，保持页面开启',
                 privacy_note: '文件只通过浏览器与 USB 数据线发送，不会上传到云端。', footer_note: 'Chrome / Edge · HTTPS 或 localhost · USB 数据线',
                 status_not_connected: '等待连接',
-                btn_connect: '连接 Switch', btn_disconnect: '断开', btn_start_server: '准备安装',
+                btn_connect: '连接', btn_disconnect: '断开', btn_start_server: '准备',
                 notice_info: '需要 Chrome/Edge，HTTPS 或 localhost。Switch 上启动 DBI 并选择「后端」。',
                 workflow_title: '一次准备，连续安装',
                 workflow_desc: '本体、更新和 DLC 可以同时加入列表。连接一次、启动一次服务，然后在 Switch 的 DBI 中依次或批量选择。',
                 workflow_step_files: '加入安装包', workflow_step_connect: '用 USB 连接 Switch', workflow_step_server: '启动服务，在 DBI 中选择安装',
                 tab_transfer: '文件传输', tab_log: '日志',
                 drop_hint: '选择游戏文件夹，自动整理安装组合', drop_support: '会递归查找 NSP、XCI、NSZ、XCZ；也可以只选择几个安装包。',
-                btn_choose_files: '选择安装包', btn_choose_folder: '选择整个文件夹',
+                btn_choose_files: '文件', btn_choose_folder: '文件夹',
                 filelist_empty: '暂无文件', btn_remove: '移除',
                 plan_title: '安装组合', plan_total: '共 {0} 个文件 · {1}',
                 role_base: '本体', role_update: '更新', role_dlc: 'DLC', role_bundle: '整合包', role_unknown: '未识别',
                 role_hint: '自动识别，可手动修正',
-                btn_clear: '清空列表', btn_clear_log: '清空日志', btn_export_log: '导出日志',
+                btn_clear: '清空', btn_clear_log: '清空', btn_export_log: '导出',
                 progress_label: '文件覆盖：{0} ({1} / {2})',
                 eta_prefix: '剩余: {0}', eta_na: '剩余: --',
                 transferred: '已传输（去重）：{0} / {1}',
@@ -781,35 +777,35 @@
                 visual_idle: 'Waiting for USB', visual_connected: 'Connected', visual_ready: 'Continue on Switch', visual_transfer: 'Transferring', visual_complete: 'Transfer complete',
                 screen_subtitle: '', compact_title: 'How to use', compact_desc: 'Follow steps 01 → 04 from left to right. The next step unlocks when the current one is complete.',
                 compact_step_files: 'Choose content', compact_step_connect: 'Connect USB', compact_step_install: 'Install in DBI', compact_formats: 'NSP · XCI · NSZ · XCZ',
-                pipeline_files_title: 'Choose content', pipeline_files_desc: 'A whole folder or multiple packages', pipeline_connect_title: 'Connect Switch', pipeline_connect_desc: 'Allow browser access to the USB device',
-                pipeline_prepare_title: 'Prepare installation', pipeline_prepare_desc: 'Open the file channel; nothing installs yet', result_title: 'Install content',
+                pipeline_files_title: 'Files', pipeline_files_desc: 'A whole folder or multiple packages', pipeline_connect_title: 'Connect', pipeline_connect_desc: 'Allow browser access to the USB device',
+                pipeline_prepare_title: 'Prepare', pipeline_prepare_desc: 'Open the file channel; nothing installs yet', pipeline_switch_title: 'Switch', result_title: 'Install content',
                 prompt_prepare_title: 'Install on Switch', prompt_prepare_desc: 'Open DBI, enter the menu below, then select packages.',
                 prompt_switch_title: 'Now continue on your Switch', prompt_switch_desc: 'DBI → <b>Install title from DBIbackend</b> → select packages.',
-                btn_prepare_install: 'Prepare installation', btn_prepared: 'Ready — continue on Switch',
+                btn_prepare_install: 'Prepare', btn_prepared: 'Ready',
                 compact_note: 'Computer: choose files → connect Switch → prepare installation · Switch: DBI → Install title from DBIbackend → select packages',
                 library_title: 'Prepare install content', library_desc: 'Choose the base game, updates, and DLC together—no separate uploads needed.',
                 auto_note: 'Package types are detected automatically and can be corrected in the list.',
                 send_title: 'Start the DBI install service', send_desc: 'After the service starts, packages appear in the DBI list on your Switch.',
                 send_state_title: 'When ready, start only once', send_state_hint: 'Keep the cable connected and this page open. After the base game, select its update on the Switch.',
-                activity_title: 'Connection and transfer log',
+                activity_title: 'Log',
                 guide_kicker: 'NEXT UP', guide_title: 'Follow these steps', guide_desc: 'Completed steps are marked automatically, so you always know what comes next.',
                 guide_switch_title: 'On your Switch', guide_switch_1: 'Open <b>DBI</b>', guide_switch_2: 'Choose <b>Install title from DBIbackend</b>', guide_switch_3: 'After the service starts, select the base game, updates, and DLC to install',
                 guide_computer_title: 'On this computer', guide_computer_1: 'Choose a folder or multiple packages', guide_computer_2: 'Click <b>Connect Switch</b> and allow the USB device', guide_computer_3: 'Click <b>Start install service</b> and keep the page open',
                 privacy_note: 'Files travel only between your browser and USB cable. Nothing is uploaded to the cloud.', footer_note: 'Chrome / Edge · HTTPS or localhost · USB data cable',
                 status_not_connected: 'Waiting to connect',
-                btn_connect: 'Connect Switch', btn_disconnect: 'Disconnect', btn_start_server: 'Prepare installation',
+                btn_connect: 'Connect', btn_disconnect: 'Disconnect', btn_start_server: 'Prepare',
                 notice_info: 'Requires Chrome/Edge, HTTPS or localhost. Launch DBI on the Switch and select "Backend".',
                 workflow_title: 'Prepare once, install continuously',
                 workflow_desc: 'Add the base game, update, and DLC together. Connect once, start the server once, then select packages in DBI on the Switch.',
                 workflow_step_files: 'Add packages', workflow_step_connect: 'Connect Switch by USB', workflow_step_server: 'Start service and install in DBI',
                 tab_transfer: 'Transfer', tab_log: 'Log',
                 drop_hint: 'Choose a game folder and build the install set', drop_support: 'Recursively finds NSP, XCI, NSZ, and XCZ files; individual package selection is also supported.',
-                btn_choose_files: 'Choose packages', btn_choose_folder: 'Choose folder',
+                btn_choose_files: 'Files', btn_choose_folder: 'Folder',
                 filelist_empty: 'No files', btn_remove: 'Remove',
                 plan_title: 'Install set', plan_total: '{0} files · {1}',
                 role_base: 'Base', role_update: 'Update', role_dlc: 'DLC', role_bundle: 'Bundle', role_unknown: 'Unknown',
                 role_hint: 'Auto-detected; you can correct it',
-                btn_clear: 'Clear List', btn_clear_log: 'Clear Log', btn_export_log: 'Export Log',
+                btn_clear: 'Clear', btn_clear_log: 'Clear', btn_export_log: 'Export',
                 progress_label: 'Coverage: {0} ({1} / {2})',
                 eta_prefix: 'ETA: {0}', eta_na: 'ETA: --',
                 transferred: 'Transferred (dedup): {0} / {1}',
@@ -953,8 +949,6 @@
             btnConnect.disabled = isConnected || fileMap.size === 0;
             btnStartServer.disabled = !isConnected || serverRunning || fileMap.size === 0;
             if (btnStartServerLabel) btnStartServerLabel.textContent = t(serverRunning ? 'btn_prepared' : 'btn_prepare_install');
-            if (switchPromptTitle) switchPromptTitle.textContent = t(serverRunning ? 'prompt_switch_title' : 'prompt_prepare_title');
-            if (switchPromptDesc) switchPromptDesc.innerHTML = t(serverRunning ? 'prompt_switch_desc' : 'prompt_prepare_desc');
         }
         function updatePlanSummary() {
             if (!planSummary) return;
