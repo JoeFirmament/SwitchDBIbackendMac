@@ -20,8 +20,8 @@ No local hosting needed, just visit: https://fallingmy.github.io/ns-web-dbibacke
 **本代码由 DeepSeek 编写。** 目前功能大体可用，但存在许多小 bug，欢迎提交 Issue 和 Pull Request。  
 **This code was written by DeepSeek.** The core functionality is mostly working, but there are many small bugs. Issues and Pull Requests are welcome.
 
-当前为 **稳定版 v9**：修复文件计量、速率改用滑动窗口 + EMA 平滑、消除分片完成误报、USB 传输超时自动断开并提示重新连接。  
-Current version is **v9**: fixed file progress tracking, speed now uses a sliding window + EMA smoothing, removed false "chunk complete" reports, and USB timeouts now auto-disconnect with a reconnection prompt.
+当前本地增强版为 **DBI Drop v10**：界面收敛为单屏拟物掌机，文件选择、类型识别、连接、传输与 Switch 操作提示集中在掌机屏幕中；同时增加文件夹选择、本体/更新/DLC 自动识别与手动修正，并补充 XCZ 支持。
+The current local enhanced version is **DBI Drop v10**: a single-screen handheld UI that keeps file selection, package detection, connection, transfer, and Switch guidance together, plus folder selection, manual correction, and XCZ support.
 
 | 项目 / Item                                  | 状态 / Status            |
 | -------------------------------------------- | ------------------------ |
@@ -30,6 +30,9 @@ Current version is **v9**: fixed file progress tracking, speed now uses a slidin
 | 速率计算 / Speed calculation                 | ✅ 基本可用 / Usable      |
 | 错误处理 / Error handling                    | ⚠️ 改进中 / Improving    |
 | 大文件稳定性 / Large file stability          | ⚠️ 需测试 / Needs testing |
+| 文件夹选择 / Folder selection                | ✅ 已支持 / Supported     |
+| 安装包识别 / Package classification          | ✅ 已支持 / Supported     |
+| 拟物状态反馈 / Visual device feedback        | ✅ 已支持 / Supported     |
 
 ---
 
@@ -47,8 +50,16 @@ This tool is primarily built for **macOS and Linux** users — these systems can
   **Pure browser-based**：No Python, Node.js or other dependencies needed
 - 🔌 **绕过 MTP**：直接通过 USB Bulk 端点通信，不受系统 MTP 协议干扰  
   **Bypasses MTP**：Communicates directly via USB Bulk endpoints, unaffected by system MTP protocol
-- 📦 **支持多格式**：NSP、XCI、NSZ  
-  **Multi-format support**：NSP, XCI, NSZ
+- 📦 **支持多格式**：NSP、XCI、NSZ、XCZ
+  **Multi-format support**：NSP, XCI, NSZ, XCZ
+- 🧭 **安装组合引导**：本体、更新和 DLC 可一次加入，只需启动一次服务
+  **Install set guidance**：Add base, update, and DLC together and start the server once
+- 📁 **文件夹选择**：自动扫描文件夹中的受支持安装包
+  **Folder selection**：Automatically scans supported packages from a selected folder
+- 🏷️ **类型识别**：根据 Title ID 和文件名识别本体、更新、DLC，可手动修正
+  **Package classification**：Detects base, update, and DLC from Title ID and filename, with manual correction
+- 🎮 **拟物状态反馈**：掌机屏幕同步显示等待连接、连接成功、传输中和传输完毕
+  **Visual device feedback**：The console display mirrors waiting, connected, transferring, and completed states
 - 📊 **传输进度**：显示文件整体覆盖进度（去重后）  
   **Transfer progress**：Shows overall file coverage (deduplicated)
 - ⚡ **速率显示**：实时估算传输速率  
@@ -81,8 +92,8 @@ This tool is primarily built for **macOS and Linux** users — these systems can
    **Open tool page**：Open the HTML file in your browser (HTTPS or localhost required)
 4. **连接设备**：点击「连接 Switch」按钮，在弹窗中选择 DBI 设备  
    **Connect device**：Click "Connect Switch" and select the DBI device from the dialog
-5. **添加文件**：拖放或点击添加 NSP/XCI/NSZ 文件到列表  
-   **Add files**：Drag & drop or click to add NSP/XCI/NSZ files
+5. **添加文件**：一次选择 NSP/XCI/NSZ/XCZ 文件，或选择整个文件夹；页面会自动标记本体、更新和 DLC
+   **Add files**：Select NSP/XCI/NSZ/XCZ files together, or choose a folder; the page labels base, update, and DLC packages automatically
 6. **启动服务**：点击「启动服务」按钮，开始监听 Switch 的传输请求  
    **Start server**：Click "Start Server" to begin listening for Switch requests
 7. **在 Switch 上操作**：在 DBI 中选择要安装的文件（文件名会出现在列表中）  
