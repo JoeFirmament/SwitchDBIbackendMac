@@ -20,8 +20,8 @@ No local hosting needed, just visit: https://fallingmy.github.io/ns-web-dbibacke
 **本代码由 DeepSeek 编写。** 目前功能大体可用，但存在许多小 bug，欢迎提交 Issue 和 Pull Request。  
 **This code was written by DeepSeek.** The core functionality is mostly working, but there are many small bugs. Issues and Pull Requests are welcome.
 
-当前本地增强版为 **DBI Drop v10**：界面收敛为单屏拟物掌机，文件选择、类型识别、连接、传输与 Switch 操作提示集中在掌机屏幕中；同时增加文件夹选择、本体/更新/DLC 自动识别与手动修正，并补充 XCZ 支持。
-The current local enhanced version is **DBI Drop v10**: a single-screen handheld UI that keeps file selection, package detection, connection, transfer, and Switch guidance together, plus folder selection, manual correction, and XCZ support.
+当前本地增强版为 **DBI Drop v11**：在单屏拟物掌机中整合游戏安装与金手指模式；支持文件夹选择、本体/更新/DLC 自动识别，以及把 ZIP 或文件夹中的 Atmosphère 金手指安全写入已挂载的 SD 卡。
+The current local enhanced version is **DBI Drop v11**: the single-screen handheld UI now combines game installation with a cheat installer, including folder selection, base/update/DLC detection, and safe installation of Atmosphère cheat ZIPs or folders to a mounted SD card.
 
 | 项目 / Item                                  | 状态 / Status            |
 | -------------------------------------------- | ------------------------ |
@@ -33,6 +33,7 @@ The current local enhanced version is **DBI Drop v10**: a single-screen handheld
 | 文件夹选择 / Folder selection                | ✅ 已支持 / Supported     |
 | 安装包识别 / Package classification          | ✅ 已支持 / Supported     |
 | 拟物状态反馈 / Visual device feedback        | ✅ 已支持 / Supported     |
+| 金手指安装 / Cheat installation              | ✅ 已支持 / Supported     |
 
 ---
 
@@ -60,6 +61,8 @@ This tool is primarily built for **macOS and Linux** users — these systems can
   **Package classification**：Detects base, update, and DLC from Title ID and filename, with manual correction
 - 🎮 **拟物状态反馈**：掌机屏幕同步显示等待连接、连接成功、传输中和传输完毕
   **Visual device feedback**：The console display mirrors waiting, connected, transferring, and completed states
+- ✨ **金手指安装**：识别 ZIP 或文件夹中的 Title ID 与 Build ID，写入前自动备份同名文件
+  **Cheat installation**：Recognizes Title ID and Build ID from a ZIP or folder and backs up same-name files before writing
 - 📊 **传输进度**：显示文件整体覆盖进度（去重后）  
   **Transfer progress**：Shows overall file coverage (deduplicated)
 - ⚡ **速率显示**：实时估算传输速率  
@@ -96,8 +99,16 @@ This tool is primarily built for **macOS and Linux** users — these systems can
    **Add files**：Select NSP/XCI/NSZ/XCZ files together, or choose a folder; the page labels base, update, and DLC packages automatically
 6. **准备安装**：点击「准备安装」后，回到 Switch 打开 DBI → `Install title from DBIbackend`；此时才会显示文件并开始后续安装
    **Prepare installation**：Click “Prepare installation,” then on Switch open DBI → `Install title from DBIbackend` to view the files and continue
-7. **在 Switch 上操作**：在 DBI 中选择要安装的文件（文件名会出现在列表中）  
+7. **在 Switch 上操作**：在 DBI 中选择要安装的文件（文件名会出现在列表中）
    **Operate on Switch**：Select the file to install in DBI (filenames will appear in the list)
+
+### 金手指 / Cheats
+
+1. 用读卡器，或在 Hekate 中选择 `Tools → USB Tools → SD Card`，先让电脑挂载 SD 卡。
+2. 在页面切换到「金手指」，选择 SD 卡根目录，再选择 ZIP 或已解压文件夹。
+3. 页面只识别 `<Title ID>/cheats/<Build ID>.txt`，确认识别结果后点击「写入 SD 卡」。同名旧文件会备份到 `DBI-Drop-Backups/cheats/`。
+
+Use a card reader or Hekate `Tools → USB Tools → SD Card` to mount the card first. Switch the page to **Cheats**, choose the SD root, then choose a ZIP or extracted folder. Recognized files are written to `atmosphere/contents/<Title ID>/cheats/`; existing same-name files are backed up under `DBI-Drop-Backups/cheats/`.
 
 ---
 

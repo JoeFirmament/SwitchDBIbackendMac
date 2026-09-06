@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DBI Drop · Switch USB 安装助手</title>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script src="https://unpkg.com/fflate@0.8.2/umd/index.js"></script>
     <style>
         :root {
             --bg: #0d1117;
@@ -348,6 +349,9 @@
         .console-app { position:relative; z-index:1; width:min(1180px, calc(100% - 28px)); margin:0 auto; padding:18px 0 30px; }
         .compact-topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; padding:0 4px; }
         .compact-topbar .brand-version { font-size:.66rem; }
+        .mode-switch { display:flex; align-items:center; gap:3px; margin-right:auto; margin-left:18px; padding:3px; border:1px solid rgba(255,255,255,.07); border-radius:10px; background:rgba(255,255,255,.025); }
+        .mode-switch button { min-width:58px; padding:5px 10px; border:0; border-radius:7px; background:transparent; color:#7f8999; cursor:pointer; font-size:.68rem; font-weight:760; transition:.2s ease; }
+        .mode-switch button.active { background:rgba(94,229,242,.12); color:var(--accent); box-shadow:inset 0 0 0 1px rgba(94,229,242,.12); }
         .handheld { display:grid; grid-template-columns:112px minmax(0, 1fr) 112px; align-items:stretch; min-height:414px; filter:drop-shadow(0 35px 55px rgba(0,0,0,.45)); transition:filter .4s ease; }
         .big-joycon { position:relative; z-index:1; overflow:hidden; border:1px solid rgba(255,255,255,.13); box-shadow:inset 7px 0 12px rgba(255,255,255,.08), inset -8px -8px 18px rgba(0,0,0,.25); }
         .big-joycon-left { border-radius:62px 15px 15px 62px; background:linear-gradient(145deg,#12cfe8,#008ca7); }
@@ -366,6 +370,7 @@
         .screen-intro h1 { margin:0; color:#f4f7fb; font-size:clamp(1.08rem,1.55vw,1.34rem); font-weight:800; line-height:1.2; letter-spacing:-.022em; }
         .screen-intro p { max-width:430px; margin:0; color:#8d97a7; font-size:.72rem; line-height:1.45; text-align:right; }
         .pipeline { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+        .pipeline.cheat-pipeline { grid-template-columns:repeat(3,minmax(0,1fr)); }
         .pipeline-stage { position:relative; display:flex; min-width:0; min-height:136px; flex-direction:column; align-items:flex-start; padding:13px; border:1px solid rgba(255,255,255,.07); border-radius:14px; background:rgba(255,255,255,.025); opacity:.62; transition:border-color .25s ease,background .25s ease,opacity .25s ease,transform .25s ease; }
         .pipeline-stage:not(:last-child)::after { content:'›'; position:absolute; z-index:3; top:50%; right:-10px; width:18px; height:24px; transform:translateY(-50%); color:#5d6879; font-size:1.5rem; line-height:21px; text-align:center; text-shadow:0 0 7px #080b11; }
         .pipeline-stage.current { border-color:rgba(94,229,242,.38); background:linear-gradient(145deg,rgba(94,229,242,.1),rgba(255,255,255,.025)); opacity:1; transform:translateY(-2px); box-shadow:0 10px 28px rgba(0,195,227,.08); }
@@ -432,6 +437,10 @@
         .screen-footer .log-toolbar { padding:0 0 8px; }
         .screen-footer .log-area { margin:0; max-height:180px; }
         .usage-footnote { position:absolute; right:24px; bottom:8px; left:24px; margin:0; color:#a1a9b6; font-size:.58rem; line-height:1.45; text-align:center; opacity:.38; }
+        .cheat-result { display:flex; min-height:56px; align-items:center; justify-content:center; margin-top:11px; padding:10px 14px; border:1px solid rgba(255,255,255,.055); border-radius:13px; background:rgba(0,0,0,.15); color:#7f8999; font-size:.68rem; text-align:center; }
+        .cheat-result.ready { justify-content:flex-start; color:#cad1dc; text-align:left; }
+        .cheat-result-list { display:flex; flex-wrap:wrap; gap:6px; }
+        .cheat-result-chip { padding:4px 7px; border:1px solid rgba(119,227,143,.18); border-radius:999px; background:rgba(119,227,143,.055); color:#a9ddb4; font-family:var(--font-mono); font-size:.58rem; }
         .compact-note { margin:15px 0 0; color:#727c8d; font-size:.68rem; text-align:center; }
         .stick,.face-buttons,.dpad,.rail-button { position:absolute; display:block; }
         .stick { top:96px; left:50%; width:42px; height:42px; transform:translateX(-50%); border:7px solid #17202a; border-radius:50%; background:radial-gradient(circle at 38% 35%,#3b4652,#151b23 62%); box-shadow:inset 2px 2px 5px rgba(255,255,255,.16),0 5px 8px rgba(0,0,0,.36); }
@@ -465,6 +474,9 @@
         @media (max-width:650px) {
             .console-app { width:min(100% - 12px,1180px); padding-top:8px; }
             .compact-topbar { padding:0 8px; }
+            .compact-topbar .brand-version { display:none; }
+            .mode-switch { margin-left:8px; }
+            .mode-switch button { min-width:48px; padding:5px 7px; }
             .handheld { grid-template-columns:10px minmax(0,1fr) 10px; min-height:0; }
             .big-joycon { border-radius:12px 3px 3px 12px; }
             .big-joycon-right { border-radius:3px 12px 12px 3px; }
@@ -475,6 +487,7 @@
             .screen-title small,.screen-device-name { display:none; }
             .screen-body { padding:16px 12px 12px; }
             .pipeline { grid-template-columns:1fr; gap:12px; }
+            .pipeline.cheat-pipeline { grid-template-columns:1fr; }
             .pipeline-stage { min-height:132px; }
             .pipeline-stage:not(:last-child)::after { content:'↓'; top:auto; right:50%; bottom:-18px; width:24px; height:22px; transform:translateX(50%); font-size:.9rem; line-height:22px; }
             .workflow-strip { gap:4px; }
@@ -488,12 +501,18 @@
             #btnStartServer { grid-column:1/-1; width:100%; }
             .compact-note { padding:0 10px; line-height:1.5; }
         }
+        @media (max-width:420px) {
+            .compact-topbar .brand-name { display:none; }
+            .mode-switch { margin-left:6px; }
+            .top-actions { gap:4px; }
+        }
     </style>
 </head>
 <body>
     <main class="console-app">
         <header class="compact-topbar">
-            <div class="brand" aria-label="DBI Drop"><div class="brand-mark" aria-hidden="true"><span></span><span></span></div><div><div class="brand-name">DBI DROP</div><div class="brand-version">WEBUSB INSTALLER</div></div></div>
+            <div class="brand" aria-label="DBI Drop"><div class="brand-mark" aria-hidden="true"><span></span><span></span></div><div><div class="brand-name">DBI DROP</div><div class="brand-version">GAME · CHEAT</div></div></div>
+            <nav class="mode-switch" aria-label="Mode"><button type="button" id="modeGames" class="active" onclick="switchMode('games')" data-i18n="mode_games">游戏</button><button type="button" id="modeCheats" onclick="switchMode('cheats')" data-i18n="mode_cheats">金手指</button></nav>
             <div class="top-actions"><button class="btn icon-btn" onclick="openHelp()" data-i18n-title="btn_help_title" title="帮助" aria-label="帮助"><i data-lucide="circle-help"></i></button><button class="btn icon-btn" id="btnLang" onclick="toggleLang()" data-i18n-title="lang_title" title="切换语言"><span data-i18n="lang_btn">EN</span></button></div>
         </header>
 
@@ -506,6 +525,7 @@
                     </header>
 
                     <div class="screen-body">
+                        <div id="installView">
                         <div class="pipeline" aria-label="Installation flow">
                             <section class="pipeline-stage" id="stepFiles">
                                 <div class="stage-head"><span class="stage-number">01</span><i data-lucide="folder-open"></i></div>
@@ -534,6 +554,30 @@
                         <section class="result-tray"><div class="plan-summary hidden" id="planSummary" aria-live="polite"></div><ul class="file-list compact-file-list" id="fileList"></ul></section>
                         <div class="screen-footer"><button class="text-button" onclick="clearFileList()" data-i18n="btn_clear">清空</button><details class="activity-panel"><summary data-i18n="activity_title">日志</summary><div class="log-toolbar"><button class="btn btn-sm" onclick="clearLog()" data-i18n="btn_clear_log">清空</button><button class="btn btn-sm" onclick="exportLog()" data-i18n="btn_export_log">导出</button></div><div class="log-area" id="logArea"></div></details></div>
                         <p class="usage-footnote" data-i18n="usage_footnote">顺序：选择文件 → 连接 Switch → 准备 → Switch：DBI → Install title from DBIbackend</p>
+                        </div>
+
+                        <div id="cheatView" class="hidden">
+                            <div class="pipeline cheat-pipeline" aria-label="Cheat installation flow">
+                                <section class="pipeline-stage current" id="cheatStepSd">
+                                    <div class="stage-head"><span class="stage-number">01</span><i data-lucide="hard-drive"></i></div>
+                                    <strong data-i18n="cheat_sd_title">选 SD 卡</strong>
+                                    <button type="button" class="btn btn-primary" id="btnChooseSd" onclick="chooseSdCard()" data-i18n="cheat_choose_sd">选择 SD 卡</button>
+                                </section>
+                                <section class="pipeline-stage" id="cheatStepPackage">
+                                    <div class="stage-head"><span class="stage-number">02</span><i data-lucide="archive"></i></div>
+                                    <strong data-i18n="cheat_package_title">选金手指</strong>
+                                    <div class="stage-drop-target"><button type="button" class="btn btn-primary" id="btnChooseCheatFolder" onclick="document.getElementById('cheatFolderInput').click()" disabled data-i18n="btn_choose_folder">文件夹</button><button type="button" class="stage-link" id="btnChooseCheatZip" onclick="document.getElementById('cheatZipInput').click()" disabled>ZIP</button></div>
+                                    <input type="file" id="cheatZipInput" accept=".zip,application/zip" hidden onchange="handleCheatZip(event)"><input type="file" id="cheatFolderInput" multiple webkitdirectory directory hidden onchange="handleCheatFolder(event)">
+                                </section>
+                                <section class="pipeline-stage" id="cheatStepInstall">
+                                    <div class="stage-head"><span class="stage-number">03</span><i data-lucide="sparkles"></i></div>
+                                    <strong data-i18n="cheat_install_title">安装</strong>
+                                    <button type="button" class="btn btn-success" id="btnInstallCheats" onclick="installCheats()" disabled data-i18n="cheat_install">写入 SD 卡</button>
+                                </section>
+                            </div>
+                            <section class="cheat-result" id="cheatResult" aria-live="polite" data-i18n="cheat_empty">尚未选择金手指包</section>
+                            <p class="usage-footnote" data-i18n="cheat_footnote">先用读卡器，或 Hekate → Tools → USB Tools → SD Card 挂载</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -594,6 +638,7 @@
         const CMD_ID_LIST = 3;
         const BUFFER_SEGMENT_DATA_SIZE = 1024 * 1024; // 1MB，匹配 DBI 分片大小
         const MAX_FILE_SIZE = 256 * 1024 * 1024 * 1024;
+        const MAX_CHEAT_ARCHIVE_SIZE = 256 * 1024 * 1024;
         const HEARTBEAT_TIMEOUT = 30000;
         const TRANSFER_TIMEOUT = 15000;
         const EMA_ALPHA = 0.2; // 速率平滑系数
@@ -610,6 +655,12 @@
         let currentLang = 'zh';
         let currentStatus = null; // { key, args } 当前连接状态，语言切换时重渲染
         let visualState = 'idle';
+        let currentMode = 'games';
+        let sdRootHandle = null;
+        let cheatEntries = [];
+        let cheatStatusKey = 'cheat_status_no_sd';
+        let cheatStatusArgs = [];
+        let cheatVisualState = 'idle';
         let fileMap = new Map();
         let fileRoleMap = new Map();
         let currentTransferInfo = null;
@@ -652,6 +703,18 @@
         const progressEta = document.getElementById('progressEta');
         const fileOverallProgress = document.getElementById('fileOverallProgress');
         const logArea = document.getElementById('logArea');
+        const installView = document.getElementById('installView');
+        const cheatView = document.getElementById('cheatView');
+        const modeGames = document.getElementById('modeGames');
+        const modeCheats = document.getElementById('modeCheats');
+        const cheatStepSd = document.getElementById('cheatStepSd');
+        const cheatStepPackage = document.getElementById('cheatStepPackage');
+        const cheatStepInstall = document.getElementById('cheatStepInstall');
+        const btnChooseSd = document.getElementById('btnChooseSd');
+        const btnChooseCheatFolder = document.getElementById('btnChooseCheatFolder');
+        const btnChooseCheatZip = document.getElementById('btnChooseCheatZip');
+        const btnInstallCheats = document.getElementById('btnInstallCheats');
+        const cheatResult = document.getElementById('cheatResult');
 
         // ============================================================
         //  工具函数
@@ -681,8 +744,15 @@
         const I18N = {
             zh: {
                 app_title: 'Switch DBI Backend WebUSB 工具',
-                subtitle: '增强版 v10 · 安装组合 · 文件夹选择 · 类型识别',
+                subtitle: '增强版 v11 · 游戏安装 · 金手指管理',
                 lang_btn: 'EN', lang_title: '切换语言',
+                mode_games: '游戏', mode_cheats: '金手指',
+                cheat_status_no_sd: '未选择 SD 卡', cheat_status_sd: 'SD 卡已连接', cheat_status_ready: '已识别 {0} 个文件', cheat_status_writing: '正在写入', cheat_status_complete: '安装完成',
+                cheat_sd_title: '选 SD 卡', cheat_choose_sd: '选择 SD 卡', cheat_package_title: '选金手指', cheat_install_title: '安装', cheat_install: '写入 SD 卡',
+                cheat_empty: '尚未选择金手指包', cheat_summary: '{0} 个游戏 · {1} 个文件', cheat_footnote: '先用读卡器，或 Hekate → Tools → USB Tools → SD Card 挂载',
+                cheat_unsupported: '当前浏览器不能写入文件夹；请通过 Chrome / Edge 的 HTTPS 页面或 localhost 打开', cheat_wrong_root: '请选择 SD 卡根目录（应包含 atmosphere 文件夹）',
+                cheat_zip_unavailable: 'ZIP 解析组件未加载；可直接选择已解压的文件夹', cheat_no_entries: '没有识别到金手指；目录应包含 16 位 Title ID / cheats / 16 位 Build ID.txt',
+                cheat_selected_sd: '已选择：{0}', cheat_read_failed: '读取失败：{0}', cheat_install_failed: '写入失败：{0}', cheat_installed: '已安装 {0} 个文件', cheat_complete_summary: '已安装 {0} 个文件{1}', cheat_backup_suffix: ' · 旧文件已备份', cheat_backup_note: '同名旧文件已备份到 DBI-Drop-Backups',
                 hero_kicker: 'DBI · USB 安装',
                 hero_title: '把整套游戏，一次送进 Switch。',
                 hero_desc: '选择包含本体、更新与 DLC 的文件夹，我们会自动整理。连接一次、启动一次，然后回到 Switch 完成安装。',
@@ -769,8 +839,15 @@
             },
             en: {
                 app_title: 'Switch DBI Backend WebUSB Tool',
-                subtitle: 'Enhanced v10 · install sets · folder picker · package detection',
+                subtitle: 'Enhanced v11 · game install · cheat manager',
                 lang_btn: '中文', lang_title: 'Switch language',
+                mode_games: 'Games', mode_cheats: 'Cheats',
+                cheat_status_no_sd: 'No SD card selected', cheat_status_sd: 'SD card connected', cheat_status_ready: '{0} files recognized', cheat_status_writing: 'Writing', cheat_status_complete: 'Install complete',
+                cheat_sd_title: 'SD card', cheat_choose_sd: 'Choose SD card', cheat_package_title: 'Cheats', cheat_install_title: 'Install', cheat_install: 'Write to SD card',
+                cheat_empty: 'No cheat package selected', cheat_summary: '{0} titles · {1} files', cheat_footnote: 'Mount first with a card reader, or Hekate → Tools → USB Tools → SD Card',
+                cheat_unsupported: 'This browser cannot write folders; open the HTTPS page or localhost in Chrome / Edge', cheat_wrong_root: 'Choose the SD card root (it must contain the atmosphere folder)',
+                cheat_zip_unavailable: 'The ZIP parser did not load; choose an extracted folder instead', cheat_no_entries: 'No cheats recognized; expected 16-char Title ID / cheats / 16-char Build ID.txt',
+                cheat_selected_sd: 'Selected: {0}', cheat_read_failed: 'Could not read: {0}', cheat_install_failed: 'Could not write: {0}', cheat_installed: 'Installed {0} files', cheat_complete_summary: 'Installed {0} files{1}', cheat_backup_suffix: ' · old files backed up', cheat_backup_note: 'Existing files were backed up to DBI-Drop-Backups',
                 hero_kicker: 'DBI · USB INSTALL',
                 hero_title: 'Send the whole game set to Switch in one go.',
                 hero_desc: 'Choose a folder containing the base game, updates, and DLC. We will organize it automatically. Connect once, start once, then finish on your Switch.',
@@ -863,8 +940,21 @@
         }
         function renderVisualState() {
             if (!connectionVisual || !visualStatusText) return;
+            if (currentMode === 'cheats') {
+                connectionVisual.dataset.state = cheatVisualState;
+                visualStatusText.textContent = t(cheatStatusKey, ...cheatStatusArgs);
+                statusText.textContent = sdRootHandle ? sdRootHandle.name : t('cheat_status_no_sd');
+                statusDot.className = sdRootHandle ? 'status-dot connected' : 'status-dot';
+                const cheatIcon = connectionVisual.querySelector('.screen-icon');
+                const cheatIconName = { idle: 'hard-drive', connected: 'hard-drive', ready: 'file-check-2', transfer: 'arrow-down-to-line', complete: 'circle-check-big' }[cheatVisualState] || 'hard-drive';
+                if (cheatIcon) cheatIcon.setAttribute('data-lucide', cheatIconName);
+                if (window.lucide) lucide.createIcons();
+                return;
+            }
             connectionVisual.dataset.state = visualState;
             visualStatusText.textContent = t(`visual_${visualState}`);
+            statusDot.className = isConnected ? 'status-dot connected' : 'status-dot';
+            statusText.textContent = currentStatus ? t(currentStatus.key, ...(currentStatus.args || [])) : t('status_not_connected');
             const iconName = { idle: 'usb', connected: 'link', ready: 'radio-tower', transfer: 'arrow-down-to-line', complete: 'circle-check-big' }[visualState] || 'usb';
             const icon = connectionVisual.querySelector('.screen-icon');
             if (icon) icon.setAttribute('data-lucide', iconName);
@@ -883,6 +973,7 @@
             if (currentStatus) statusText.textContent = t(currentStatus.key, ...(currentStatus.args || []));
             updateFileListUI();
             updateGuideState();
+            updateCheatState();
             renderVisualState();
             if (!progressContainer.classList.contains('active')) hideProgress();
             if (window.lucide) lucide.createIcons();
@@ -1001,6 +1092,215 @@
         function switchTab(id) {
             document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === id));
             document.querySelectorAll('.tab-content').forEach(tc => tc.classList.toggle('active', tc.id === `tab-${id}`));
+        }
+
+        // ============================================================
+        //  金手指：已挂载 SD 卡写入
+        // ============================================================
+        function switchMode(mode) {
+            if (!['games', 'cheats'].includes(mode)) return;
+            currentMode = mode;
+            installView.classList.toggle('hidden', mode !== 'games');
+            cheatView.classList.toggle('hidden', mode !== 'cheats');
+            modeGames.classList.toggle('active', mode === 'games');
+            modeCheats.classList.toggle('active', mode === 'cheats');
+            renderVisualState();
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function setCheatVisualState(state, key, ...args) {
+            cheatVisualState = state;
+            cheatStatusKey = key;
+            cheatStatusArgs = args;
+            updateCheatState();
+            if (currentMode === 'cheats') renderVisualState();
+        }
+
+        function renderCheatResult() {
+            if (cheatEntries.length === 0) {
+                cheatResult.className = 'cheat-result';
+                cheatResult.textContent = t('cheat_empty');
+                return;
+            }
+            const counts = new Map();
+            cheatEntries.forEach(entry => counts.set(entry.titleId, (counts.get(entry.titleId) || 0) + 1));
+            cheatResult.className = 'cheat-result ready';
+            cheatResult.innerHTML = `<div class="cheat-result-list">${Array.from(counts, ([titleId, count]) => `<span class="cheat-result-chip">${titleId} · ${count}</span>`).join('')}</div>`;
+        }
+
+        function updateCheatState() {
+            const hasSd = !!sdRootHandle;
+            const hasEntries = cheatEntries.length > 0;
+            cheatStepSd.classList.toggle('done', hasSd);
+            cheatStepSd.classList.toggle('current', !hasSd);
+            cheatStepPackage.classList.toggle('done', hasEntries);
+            cheatStepPackage.classList.toggle('current', hasSd && !hasEntries);
+            cheatStepInstall.classList.toggle('done', cheatVisualState === 'complete');
+            cheatStepInstall.classList.toggle('current', hasEntries && cheatVisualState !== 'complete');
+            btnChooseCheatFolder.disabled = !hasSd || cheatVisualState === 'transfer';
+            btnChooseCheatZip.disabled = !hasSd || cheatVisualState === 'transfer';
+            btnChooseSd.disabled = cheatVisualState === 'transfer';
+            btnInstallCheats.disabled = !hasSd || !hasEntries || cheatVisualState === 'transfer' || cheatVisualState === 'complete';
+            renderCheatResult();
+        }
+
+        async function ensureReadWritePermission(handle, request = true) {
+            const options = { mode: 'readwrite' };
+            if (!handle.queryPermission || !handle.requestPermission) return true;
+            if (await handle.queryPermission(options) === 'granted') return true;
+            return request && await handle.requestPermission(options) === 'granted';
+        }
+
+        async function chooseSdCard() {
+            if (!window.isSecureContext || !('showDirectoryPicker' in window)) {
+                cheatResult.className = 'cheat-result';
+                cheatResult.textContent = t('cheat_unsupported');
+                return;
+            }
+            try {
+                const handle = await window.showDirectoryPicker({ mode: 'readwrite' });
+                if (!await ensureReadWritePermission(handle)) return;
+                try {
+                    await handle.getDirectoryHandle('atmosphere');
+                } catch (err) {
+                    cheatResult.className = 'cheat-result';
+                    cheatResult.textContent = t('cheat_wrong_root');
+                    return;
+                }
+                sdRootHandle = handle;
+                setCheatVisualState(cheatEntries.length ? 'ready' : 'connected', cheatEntries.length ? 'cheat_status_ready' : 'cheat_status_sd', cheatEntries.length);
+                log(t('cheat_selected_sd', handle.name));
+            } catch (err) {
+                if (err.name !== 'AbortError') {
+                    cheatResult.className = 'cheat-result';
+                    cheatResult.textContent = t('cheat_read_failed', err.message);
+                    log(t('cheat_read_failed', err.message), 'error');
+                }
+            }
+        }
+
+        function parseCheatEntries(rawEntries) {
+            const recognized = new Map();
+            for (const raw of rawEntries) {
+                const path = raw.path.replace(/\\/g, '/').replace(/^\.\//, '');
+                const match = path.match(/(?:^|\/)([0-9a-f]{16})\/cheats\/([0-9a-f]{16})\.txt$/i);
+                if (!match) continue;
+                const titleId = match[1].toUpperCase();
+                const buildId = match[2].toUpperCase();
+                recognized.set(`${titleId}/${buildId}`, { titleId, buildId, data: raw.data, sourcePath: path });
+            }
+            return Array.from(recognized.values());
+        }
+
+        function acceptCheatEntries(rawEntries) {
+            const parsed = parseCheatEntries(rawEntries);
+            if (parsed.length === 0) {
+                cheatEntries = [];
+                setCheatVisualState('connected', 'cheat_status_sd');
+                cheatResult.className = 'cheat-result';
+                cheatResult.textContent = t('cheat_no_entries');
+                log(t('cheat_no_entries'), 'warning');
+                return;
+            }
+            cheatEntries = parsed;
+            setCheatVisualState('ready', 'cheat_status_ready', parsed.length);
+            const titleCount = new Set(parsed.map(entry => entry.titleId)).size;
+            log(t('cheat_summary', titleCount, parsed.length));
+        }
+
+        async function handleCheatFolder(event) {
+            const files = Array.from(event.target.files || []);
+            event.target.value = '';
+            try {
+                const rawEntries = [];
+                for (const file of files) {
+                    if (!file.name.toLowerCase().endsWith('.txt')) continue;
+                    rawEntries.push({ path: file.webkitRelativePath || file.name, data: new Uint8Array(await file.arrayBuffer()) });
+                }
+                acceptCheatEntries(rawEntries);
+            } catch (err) {
+                cheatResult.textContent = t('cheat_read_failed', err.message);
+                log(t('cheat_read_failed', err.message), 'error');
+            }
+        }
+
+        async function handleCheatZip(event) {
+            const file = event.target.files && event.target.files[0];
+            event.target.value = '';
+            if (!file) return;
+            if (!window.fflate) {
+                cheatResult.textContent = t('cheat_zip_unavailable');
+                return;
+            }
+            if (file.size > MAX_CHEAT_ARCHIVE_SIZE) {
+                cheatResult.textContent = t('cheat_read_failed', 'ZIP > 256 MB');
+                return;
+            }
+            try {
+                const archive = new Uint8Array(await file.arrayBuffer());
+                const unzipped = await new Promise((resolve, reject) => window.fflate.unzip(archive, (err, data) => err ? reject(err) : resolve(data)));
+                const rawEntries = Object.entries(unzipped).map(([path, data]) => ({ path, data }));
+                acceptCheatEntries(rawEntries);
+            } catch (err) {
+                cheatResult.textContent = t('cheat_read_failed', err.message);
+                log(t('cheat_read_failed', err.message), 'error');
+            }
+        }
+
+        async function getNestedDirectory(root, parts, create = true) {
+            let current = root;
+            for (const part of parts) current = await current.getDirectoryHandle(part, { create });
+            return current;
+        }
+
+        async function writeHandleFile(directory, name, data) {
+            const handle = await directory.getFileHandle(name, { create: true });
+            const writable = await handle.createWritable();
+            try {
+                await writable.write(data);
+            } finally {
+                await writable.close();
+            }
+        }
+
+        function backupTimestamp() {
+            const d = new Date();
+            const two = value => String(value).padStart(2, '0');
+            return `${d.getFullYear()}${two(d.getMonth() + 1)}${two(d.getDate())}-${two(d.getHours())}${two(d.getMinutes())}${two(d.getSeconds())}`;
+        }
+
+        async function installCheats() {
+            if (!sdRootHandle || cheatEntries.length === 0) return;
+            try {
+                if (!await ensureReadWritePermission(sdRootHandle)) throw new Error('Write permission denied');
+                setCheatVisualState('transfer', 'cheat_status_writing');
+                const stamp = backupTimestamp();
+                let backups = 0;
+                for (const entry of cheatEntries) {
+                    const destination = await getNestedDirectory(sdRootHandle, ['atmosphere', 'contents', entry.titleId, 'cheats']);
+                    const fileName = `${entry.buildId}.txt`;
+                    try {
+                        const oldHandle = await destination.getFileHandle(fileName);
+                        const oldFile = await oldHandle.getFile();
+                        const backupDir = await getNestedDirectory(sdRootHandle, ['DBI-Drop-Backups', 'cheats', stamp, entry.titleId]);
+                        await writeHandleFile(backupDir, fileName, await oldFile.arrayBuffer());
+                        backups += 1;
+                    } catch (err) {
+                        if (err.name !== 'NotFoundError') throw err;
+                    }
+                    await writeHandleFile(destination, fileName, entry.data);
+                }
+                setCheatVisualState('complete', 'cheat_status_complete');
+                cheatResult.className = 'cheat-result ready';
+                cheatResult.textContent = t('cheat_complete_summary', cheatEntries.length, backups ? t('cheat_backup_suffix') : '');
+                log(t('cheat_installed', cheatEntries.length));
+                if (backups) log(t('cheat_backup_note'));
+            } catch (err) {
+                setCheatVisualState('ready', 'cheat_status_ready', cheatEntries.length);
+                cheatResult.className = 'cheat-result';
+                cheatResult.textContent = t('cheat_install_failed', err.message);
+                log(t('cheat_install_failed', err.message), 'error');
+            }
         }
 
         // ---------- 区间合并 ----------
@@ -1473,11 +1773,16 @@
             applyLang();
             log(t('log_loaded'));
             log(t('log_loaded_note'));
-            if (!('usb' in navigator)) { log(t('log_no_webusb'), 'error'); btnConnect.disabled = true; return; }
-            navigator.usb.addEventListener('disconnect', handleUSBDisconnect);
+            if (!('usb' in navigator)) {
+                log(t('log_no_webusb'), 'error');
+                btnConnect.disabled = true;
+            } else {
+                navigator.usb.addEventListener('disconnect', handleUSBDisconnect);
+            }
             document.addEventListener('dragover', e => e.preventDefault());
             document.addEventListener('drop', e => e.preventDefault());
             updateFileListUI();
+            updateCheatState();
             if (window.lucide) lucide.createIcons();
             showWindowsNotice();
         }
@@ -1500,6 +1805,11 @@
         window.closeHelp = closeHelp;
         window.clearLog = clearLog;
         window.exportLog = exportLog;
+        window.switchMode = switchMode;
+        window.chooseSdCard = chooseSdCard;
+        window.handleCheatFolder = handleCheatFolder;
+        window.handleCheatZip = handleCheatZip;
+        window.installCheats = installCheats;
     </script>
 </body>
 </html>
