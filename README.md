@@ -1,162 +1,126 @@
-# ns-web-dbibackend：Switch DBI Backend WebUSB 传输工具 / ns-web-dbibackend: Switch DBI Backend WebUSB Transfer Tool
+# SwitchDBIbackendMac · DBI Drop
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://makeapullrequest.com)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-在线使用-00c3e3)](https://joefirmament.github.io/SwitchDBIbackendMac/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> 一个基于 WebUSB API 的 Switch DBI 后端传输工具，无需安装任何软件，打开浏览器即可使用。  
-> A browser-based Switch DBI Backend transfer tool using WebUSB API. No installation required.
+一个为 macOS 与 Switch 玩家设计的纯网页工具，用于通过 DBI Backend 安装游戏内容，并整理、写入 Atmosphère 金手指。
 
----
+## 在线使用
 
-## 🌐 在线使用 / Online
+**访问地址：<https://joefirmament.github.io/SwitchDBIbackendMac/>**
 
-无需本地运行，直接访问：https://fallingmy.github.io/ns-web-dbibackend/  
-No local hosting needed, just visit: https://fallingmy.github.io/ns-web-dbibackend/
+推荐使用最新版 Chrome 或 Edge。页面在浏览器本地处理文件，不会把游戏文件或金手指上传到服务器。
 
----
+![DBI Drop 页面截图](./dbi-drop-pages.jpg)
 
-## ⚠️ 项目状态 / Project Status
+## 用途
 
-**本代码由 DeepSeek 编写。** 目前功能大体可用，但存在许多小 bug，欢迎提交 Issue 和 Pull Request。  
-**This code was written by DeepSeek.** The core functionality is mostly working, but there are many small bugs. Issues and Pull Requests are welcome.
+### 游戏安装
 
-当前本地增强版为 **DBI Drop v11**：在单屏拟物掌机中整合游戏安装与金手指模式；支持文件夹选择、本体/更新/DLC 自动识别，以及把 ZIP 或文件夹中的 Atmosphère 金手指安全写入已挂载的 SD 卡。
-The current local enhanced version is **DBI Drop v11**: the single-screen handheld UI now combines game installation with a cheat installer, including folder selection, base/update/DLC detection, and safe installation of Atmosphère cheat ZIPs or folders to a mounted SD card.
+通过 WebUSB 与 Switch 上的 DBI Backend 通信，提供 NSP、XCI、NSZ、XCZ 文件。玩家可以把本体、更新包和 DLC 一次加入列表，再回到 DBI 中依次或批量选择安装。
 
-| 项目 / Item                                  | 状态 / Status            |
-| -------------------------------------------- | ------------------------ |
-| 基本连接与传输 / Basic connection & transfer | ✅ 可用 / Working         |
-| 文件计量 / File progress tracking            | ✅ 已修复 / Fixed (v9)    |
-| 速率计算 / Speed calculation                 | ✅ 基本可用 / Usable      |
-| 错误处理 / Error handling                    | ⚠️ 改进中 / Improving    |
-| 大文件稳定性 / Large file stability          | ⚠️ 需测试 / Needs testing |
-| 文件夹选择 / Folder selection                | ✅ 已支持 / Supported     |
-| 安装包识别 / Package classification          | ✅ 已支持 / Supported     |
-| 拟物状态反馈 / Visual device feedback        | ✅ 已支持 / Supported     |
-| 金手指安装 / Cheat installation              | ✅ 已支持 / Supported     |
+### 金手指安装
 
----
+读取 ZIP 或解压后的金手指文件夹，自动识别以下 Atmosphère 目录结构：
 
-## 📖 项目简介 / Introduction
-
-这是一个纯前端的 HTML 工具，利用 Chromium 内核浏览器（Chrome / Edge）的 WebUSB API 直接与 Nintendo Switch 上的 DBI 插件通信，实现 NSP / XCI / NSZ 游戏文件的传输安装。  
-This is a pure frontend HTML tool that uses the WebUSB API in Chromium-based browsers (Chrome/Edge) to communicate directly with the DBI plugin on a Nintendo Switch for transferring and installing NSP/XCI/NSZ game files.
-
-这个工具主要是为了方便 **macOS 和 Linux** 用户使用而制作的——这两个系统无法（或不方便）通过 MTP 挂载 Switch，浏览器 + WebUSB 是最省事的传输方式。Windows 用户建议优先使用 DBI 的 MTP 连接模式（资源管理器直接拖放文件，无需安装驱动）。  
-This tool is primarily built for **macOS and Linux** users — these systems cannot (or cannot easily) mount the Switch via MTP, so a browser + WebUSB is the most convenient way to transfer. Windows users are recommended to use DBI's MTP mode instead (drag & drop in Explorer, no driver needed).
-
-### 特性 / Features
-
-- 🚀 **纯浏览器运行**：无需安装 Python、Node.js 或其他依赖  
-  **Pure browser-based**：No Python, Node.js or other dependencies needed
-- 🔌 **绕过 MTP**：直接通过 USB Bulk 端点通信，不受系统 MTP 协议干扰  
-  **Bypasses MTP**：Communicates directly via USB Bulk endpoints, unaffected by system MTP protocol
-- 📦 **支持多格式**：NSP、XCI、NSZ、XCZ
-  **Multi-format support**：NSP, XCI, NSZ, XCZ
-- 🧭 **安装组合引导**：本体、更新和 DLC 可一次加入，只需启动一次服务
-  **Install set guidance**：Add base, update, and DLC together and start the server once
-- 📁 **文件夹选择**：自动扫描文件夹中的受支持安装包
-  **Folder selection**：Automatically scans supported packages from a selected folder
-- 🏷️ **类型识别**：根据 Title ID 和文件名识别本体、更新、DLC，可手动修正
-  **Package classification**：Detects base, update, and DLC from Title ID and filename, with manual correction
-- 🎮 **拟物状态反馈**：掌机屏幕同步显示等待连接、连接成功、传输中和传输完毕
-  **Visual device feedback**：The console display mirrors waiting, connected, transferring, and completed states
-- ✨ **金手指安装**：识别 ZIP 或文件夹中的 Title ID 与 Build ID，写入前自动备份同名文件
-  **Cheat installation**：Recognizes Title ID and Build ID from a ZIP or folder and backs up same-name files before writing
-- 📊 **传输进度**：显示文件整体覆盖进度（去重后）  
-  **Transfer progress**：Shows overall file coverage (deduplicated)
-- ⚡ **速率显示**：实时估算传输速率  
-  **Speed display**：Real-time transfer speed estimation
-- 🛡️ **超时保护**：内置心跳检测与 USB 读写超时  
-  **Timeout protection**：Built-in heartbeat detection and USB read/write timeouts
-- 🌐 **中英双语**：右上角一键切换全部界面语言（含排查指南）  
-  **Bilingual UI**：One-click language switch (ZH/EN) in the top-right corner, including the troubleshooting guide
-
----
-
-## 🔧 使用方法 / Usage
-
-### 前提条件 / Prerequisites
-
-1. **Switch 端**：已安装 [DBI](https://github.com/rashevskyv/dbi) 插件  
-   **On Switch**：DBI plugin installed
-2. **电脑端**：Chrome 或 Edge 浏览器（版本 ≥ 89，支持 WebUSB）  
-   **On PC**：Chrome or Edge browser (version ≥ 89, WebUSB supported)
-3. **USB 数据线**：支持数据传输的 Type-C 线（非仅充电线）  
-   **USB cable**：Data-capable Type-C cable (not charge-only)
-
-### 操作步骤 / Steps
-
-1. **启动 DBI**：在 Switch 相册中打开 DBI，选择「后端」（Backend）模式  
-   **Launch DBI**：Open DBI from the Switch album, select "Backend" mode
-2. **连接 USB**：用数据线连接 Switch 与电脑  
-   **Connect USB**：Connect Switch to PC with a data cable
-3. **打开工具页面**：在浏览器中打开本工具的 HTML 文件（需 HTTPS 或 localhost 环境）  
-   **Open tool page**：Open the HTML file in your browser (HTTPS or localhost required)
-4. **连接设备**：点击「连接 Switch」按钮，在弹窗中选择 DBI 设备  
-   **Connect device**：Click "Connect Switch" and select the DBI device from the dialog
-5. **添加文件**：一次选择 NSP/XCI/NSZ/XCZ 文件，或选择整个文件夹；页面会自动标记本体、更新和 DLC
-   **Add files**：Select NSP/XCI/NSZ/XCZ files together, or choose a folder; the page labels base, update, and DLC packages automatically
-6. **准备安装**：点击「准备安装」后，回到 Switch 打开 DBI → `Install title from DBIbackend`；此时才会显示文件并开始后续安装
-   **Prepare installation**：Click “Prepare installation,” then on Switch open DBI → `Install title from DBIbackend` to view the files and continue
-7. **在 Switch 上操作**：在 DBI 中选择要安装的文件（文件名会出现在列表中）
-   **Operate on Switch**：Select the file to install in DBI (filenames will appear in the list)
-
-### 金手指 / Cheats
-
-1. 用读卡器，或在 Hekate 中选择 `Tools → USB Tools → SD Card`，先让电脑挂载 SD 卡。
-2. 在页面切换到「金手指」，选择 SD 卡根目录，再选择 ZIP 或已解压文件夹。
-3. 页面只识别 `<Title ID>/cheats/<Build ID>.txt`，确认识别结果后点击「写入 SD 卡」。同名旧文件会备份到 `DBI-Drop-Backups/cheats/`。
-
-Use a card reader or Hekate `Tools → USB Tools → SD Card` to mount the card first. Switch the page to **Cheats**, choose the SD root, then choose a ZIP or extracted folder. Recognized files are written to `atmosphere/contents/<Title ID>/cheats/`; existing same-name files are backed up under `DBI-Drop-Backups/cheats/`.
-
----
-
-## 🖥️ 本地运行 / Local Hosting
-
-由于 WebUSB 要求安全上下文，你需要通过以下任一方式运行：
-
-Since WebUSB requires a secure context, you need to run it via one of these methods:
-
-```bash
-# 方式 1：使用 Python 内置 HTTP 服务器
-# Method 1: Python built-in HTTP server
-python3 -m http.server 8080
-# 然后访问 http://localhost:8080
-
-# 方式 2：使用 Node.js http-server
-# Method 2: Node.js http-server
-npx http-server -p 8080
-# 然后访问 http://localhost:8080
+```text
+<Title ID>/cheats/<Build ID>.txt
 ```
 
----
+识别完成后，工具会将文件写入 SD 卡：
 
-## 🔍 常见问题 / Troubleshooting
+```text
+atmosphere/contents/<Title ID>/cheats/<Build ID>.txt
+```
 
-**连接不到设备 / Cannot find the device**
+若目标位置已有同名文件，旧文件会先备份至：
 
-- 确认 Switch 上 DBI 已启动并处于「后端」(Backend) 模式
-- 确认使用支持数据传输的 USB 线（非仅充电线），尝试换一个 USB 口
-- 关闭占用 USB 的软件（如系统文件管理器对 Switch 的 MTP 弹窗）
-- 页面必须通过 HTTPS 或 localhost 访问，`file://` 协议下 WebUSB 不可用
+```text
+DBI-Drop-Backups/cheats/
+```
 
-**传输中断后无法重新连接 / Cannot reconnect after a transfer failure**
+## 便捷在哪里
 
-USB 传输超时后设备连接无法恢复，工具会自动断开并提示重新连接；如仍失败请刷新页面后重试。
+- 无需安装 DBIbackend 桌面程序，打开网页即可使用。
+- 可以直接选择整个游戏文件夹，不必逐个添加安装包。
+- 自动区分本体、更新包、DLC 与整合包，识别不准时也可以手动修正。
+- USB 只需连接和准备一次，随后可在 Switch 的 DBI 中继续选择多个文件。
+- 使用拟物 Switch 界面集中显示等待连接、连接成功、准备完成、传输中和传输完成等状态。
+- 金手指支持 ZIP 和文件夹，不需要手动逐层创建 Title ID、`cheats` 和 Build ID 路径。
+- 覆盖金手指前自动备份已有文件，方便恢复。
+- 游戏与金手指文件均在本机处理，不经过云端上传。
 
-**Windows 下无法识别设备 / Device not detected on Windows**
+## 使用方法
 
-WebUSB 在 Windows 上要求设备接口绑定 **WinUSB** 驱动，而 DBI 官方教程为 Windows 推荐安装的是 **libusbK** 驱动（供 dbibackend.exe 使用）。libusbK 驱动下浏览器无法访问设备，选择弹窗中不会出现 Switch。macOS / Linux 无此驱动要求，可直接使用。
+### 安装游戏本体、更新包或 DLC
 
-修复：用 [Zadig](https://zadig.akeo.ie) 将 Switch 设备的驱动替换为 **WinUSB**（Options → List All Devices → 选择 Switch / DBI 设备（VID 057E / PID 3000）→ 目标驱动选 WinUSB → Install），然后重新插拔 USB。替换后 dbibackend.exe 依然可用（libusb 支持 WinUSB）。
+准备条件：
 
-**Windows 下 WebUSB 无响应 / WebUSB not responding on Windows**
+- Switch 已安装并能够运行 [DBI](https://github.com/rashevskyv/dbi)。
+- 使用支持数据传输的 USB-C 数据线。
+- 电脑使用 Chrome 或 Edge，并通过 HTTPS 页面访问本工具。
 
-检查设备管理器中 Switch 的驱动，若被识别为 MTP 设备，需先在系统设置中禁用 MTP 自动挂载（或在 DBI 端重新插拔）。
+操作步骤：
 
----
+1. 在网页顶部选择“游戏”。
+2. 选择包含本体、更新包和 DLC 的文件夹，也可以单独选择多个文件。
+3. 在 Switch 上打开 DBI 的 Backend 模式，并通过 USB 连接电脑。
+4. 点击网页中的“连接”，在浏览器设备窗口中选择 Switch。
+5. 点击“准备”。
+6. 回到 Switch，进入 `Install title from DBIbackend`。
+7. 在 DBI 列表中选择需要安装的本体、更新包和 DLC。
 
-## 📜 许可 / License
+DBI Backend 与 DBI 的 MTP 模式不是同一种连接方式。使用本网页安装游戏时，应进入 Backend 模式。
 
-[MIT](LICENSE)
+### 安装金手指
+
+网页不能直接把 DBI 的 MTP 设备当作普通文件夹写入，因此需要先把 SD 卡挂载成电脑可访问的磁盘。
+
+1. 使用读卡器连接 SD 卡；或者进入 Hekate，选择 `Tools → USB Tools → SD Card`。
+2. 确认 SD 卡已经出现在 macOS 或电脑的磁盘列表中。
+3. 在网页顶部选择“金手指”。
+4. 点击“选择 SD 卡”，选择包含 `atmosphere` 文件夹的 SD 卡根目录。
+5. 选择金手指 ZIP 或已解压的文件夹。
+6. 确认识别到的 Title ID 和文件数量后，点击“写入 SD 卡”。
+7. 安全弹出 SD 卡，然后回到 Switch。
+
+## 浏览器与系统说明
+
+- macOS：推荐 Chrome 或 Edge；Safari 不支持本工具所需的全部 WebUSB 与目录写入功能。
+- Linux：Chrome 或 Chromium 通常可用，部分系统可能需要 USB 设备权限规则。
+- Windows：WebUSB 模式可能需要 WinUSB 驱动；如果只使用 DBI MTP，可继续使用系统文件管理器，不必使用本网页的游戏模式。
+- 直接双击 `index.html` 打开的 `file://` 页面不能完整使用 WebUSB。请使用 GitHub Pages、HTTPS 或 `localhost`。
+
+## 本地运行
+
+仓库是纯静态页面，不需要构建：
+
+```bash
+python3 -m http.server 8080
+```
+
+然后访问：<http://localhost:8080/>
+
+## 项目地址
+
+- 在线页面：<https://joefirmament.github.io/SwitchDBIbackendMac/>
+- GitHub 仓库：<https://github.com/JoeFirmament/SwitchDBIbackendMac>
+
+## 致谢与来源
+
+本项目是在以下开源项目基础上进行二次开发与重新设计：
+
+- [FallingMY/ns-web-dbibackend](https://github.com/FallingMY/ns-web-dbibackend)：提供浏览器通过 WebUSB 与 DBI Backend 通信的原始实现基础。
+- [rashevskyv/DBI](https://github.com/rashevskyv/dbi)：Switch 端 DBI 工具及 Backend 工作方式。
+- [Atmosphere-NX/Atmosphere](https://github.com/Atmosphere-NX/Atmosphere)：Atmosphère 金手指目录与运行环境。
+- [CTCaer/hekate](https://github.com/CTCaer/hekate)：可通过 USB Tools 将 SD 卡挂载到电脑。
+
+感谢以上项目及其维护者。上游代码版权与署名按仓库中的 [MIT License](LICENSE) 保留。
+
+## 免责声明
+
+本项目不包含、提供或分发任何游戏、更新包、DLC 或金手指内容。请仅处理你有权使用的文件，并自行承担修改主机与 SD 卡内容的风险。本项目与 Nintendo、DBI、Atmosphère 和 Hekate 的维护团队没有隶属关系。
+
+## 许可证
+
+本项目依照 [MIT License](LICENSE) 发布。
